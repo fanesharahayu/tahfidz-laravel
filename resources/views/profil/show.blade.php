@@ -41,4 +41,37 @@
         <a href="{{ route('password.edit') }}" class="btn btn-secondary"><i data-lucide="key-round"></i> Ganti Password</a>
     </div>
 </div>
+
+<div class="card" style="max-width:600px">
+    <h3>Sesi Aktif ({{ count($sessions) }})</h3>
+    <p class="muted">Perangkat yang sedang login memakai akun ini.</p>
+    @if (empty($sessions))
+        <p class="muted">Tidak ada data sesi. (Aktif bila penyimpanan sesi memakai database.)</p>
+    @else
+        <div class="table-wrap"><table>
+            <tr><th>Perangkat</th><th>IP</th><th>Masuk</th><th>Terakhir aktif</th><th>Durasi</th><th>Status</th></tr>
+            @foreach ($sessions as $s)
+                <tr @if ($s['is_current']) style="background:var(--green-50)" @endif>
+                    <td>
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <i data-lucide="{{ \App\Helpers\UserAgentParser::deviceIcon($s['device']) }}"></i>
+                            <div><strong>{{ $s['os'] }}</strong><br><span class="muted">{{ $s['browser'] }} · {{ $s['device'] }}</span></div>
+                        </div>
+                    </td>
+                    <td>{{ $s['ip'] }}</td>
+                    <td class="muted">{{ $s['login_at'] ? $s['login_at']->format('d M Y H:i') : '-' }}</td>
+                    <td class="muted">{{ $s['last_active']->locale('id')->diffForHumans() }}<br>{{ $s['last_active']->format('H:i') }}</td>
+                    <td>{{ $s['duration'] }}</td>
+                    <td>
+                        @if ($s['is_current'])
+                            <span class="badge badge-green">Perangkat ini</span>
+                        @else
+                            <span class="badge badge-gray">Lainnya</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </table></div>
+    @endif
+</div>
 @endsection

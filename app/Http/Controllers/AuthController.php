@@ -29,6 +29,7 @@ class AuthController extends Controller
 
         if (auth()->attempt([$field => $login, 'password' => $request->input('password')], $remember)) {
             $request->session()->regenerate();
+            $request->session()->put('login_at', now()->toDateTimeString());
 
             return redirect()->intended($this->redirectPath(auth()->user()->role));
         }
@@ -37,6 +38,7 @@ class AuthController extends Controller
         $fallback = $field === 'email' ? 'username' : 'email';
         if (auth()->attempt([$fallback => $login, 'password' => $request->input('password')], $remember)) {
             $request->session()->regenerate();
+            $request->session()->put('login_at', now()->toDateTimeString());
 
             return redirect()->intended($this->redirectPath(auth()->user()->role));
         }

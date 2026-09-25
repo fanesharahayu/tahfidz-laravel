@@ -24,9 +24,8 @@ class PolishSmokeTest extends TestCase
         $this->actingAs($admin)->get('/admin/dashboard')->assertOk();
         $this->actingAs($admin)->get('/admin/users')->assertOk();
         $this->actingAs($admin)->get('/admin/wali-links')->assertOk();
-        $this->actingAs($admin)->get('/profil')->assertOk();
+        $this->actingAs($admin)->get('/profil')->assertOk()->assertSee('Sesi Aktif');
         $this->actingAs($admin)->get('/ganti-password')->assertOk();
-
         $this->actingAs($musyrif)->get('/musyrif/dashboard')->assertOk();
         $this->actingAs($musyrif)->get('/musyrif/binaan')->assertOk();
         $this->actingAs($musyrif)->get('/musyrif/setoran')->assertOk();
