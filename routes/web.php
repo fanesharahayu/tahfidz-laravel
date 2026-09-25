@@ -6,6 +6,9 @@ use App\Http\Controllers\MusyrifController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SantriController;
 use App\Http\Controllers\WaliController;
+use App\Models\Santri;
+use App\Models\Setoran;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,8 +16,19 @@ Route::get('/', function () {
         return redirect()->to(AuthController::redirectPath(auth()->user()->role));
     }
 
-    return redirect()->route('login');
-});
+    try {
+        $stats = [
+            'jumlahSantri' => Santri::count(),
+            'jumlahSetoran' => Setoran::count(),
+            'jumlahMusyrif' => User::where('role', 'musyrif')->count(),
+            'jumlahWali' => User::where('role', 'wali')->count(),
+        ];
+    } catch (\Throwable $e) {
+        $stats = ['jumlahSantri' => 0, 'jumlahSetoran' => 0, 'jumlahMusyrif' => 0, 'jumlahWali' => 0];
+    }
+
+    return view('welcome', $stats);
+})->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
