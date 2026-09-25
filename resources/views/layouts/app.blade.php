@@ -35,9 +35,20 @@
         .snav a svg { width: 18px; height: 18px; flex-shrink: 0; }
         .btn svg { width: 15px; height: 15px; vertical-align: -2px; }
         h2 svg { width: 22px; height: 22px; vertical-align: -3px; }
-        .side-foot { padding: 14px; border-top: 1px solid rgba(255,255,255,.12); font-size: 13px; }
-        .side-foot .who { font-weight: 600; }
-        .side-foot .role-badge { margin-top: 6px; }
+        .side-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,.12); }
+        .account { position: relative; }
+        .account-toggle { width: 100%; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 10px; padding: 8px 10px; cursor: pointer; text-align: left; font-size: 14px; }
+        .account-toggle:hover { background: rgba(255,255,255,.15); }
+        .account-toggle .account-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+        .account-toggle .who { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .account-toggle > svg { width: 18px; height: 18px; flex-shrink: 0; transition: transform .2s; }
+        .account.open .account-toggle > svg { transform: rotate(180deg); }
+        .account-menu { display: none; position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+        .account.open .account-menu { display: block; }
+        .account-menu a, .account-menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 14px; font-size: 14px; color: var(--ink); text-decoration: none; background: none; border: 0; cursor: pointer; }
+        .account-menu a:hover, .account-menu button:hover { background: #f3f4f6; }
+        .account-menu a.active { font-weight: 700; color: var(--green-800); }
+        .account-menu svg { width: 16px; height: 16px; flex-shrink: 0; }
         .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
         .topbar { background: var(--card); border-bottom: 1px solid var(--line); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 5; }
         .topbar .actions { display: flex; align-items: center; gap: 10px; }
@@ -200,17 +211,25 @@
                 @foreach (($nav[$role] ?? []) as [$label, $route, $icon])
                     <a href="{{ route($route) }}" class="{{ request()->routeIs($route) ? 'active' : '' }}"><i data-lucide="{{ $icon }}"></i>{{ $label }}</a>
                 @endforeach
-                <div class="group">Akun</div>
-                <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><i data-lucide="circle-user-round"></i>Profil</a>
             </nav>
             <div class="side-foot">
-                <div class="who">{{ auth()->user()->nama }}</div>
-                <div class="muted" style="color:#a7d8bf">{{ auth()->user()->username }}</div>
-                <div class="role-badge"><span class="badge badge-green">{{ $roleNames[$role] ?? $role }}</span></div>
-                <form action="{{ route('logout') }}" method="POST" style="margin-top:10px">
-                    @csrf
-                    <button class="btn btn-danger btn-sm" type="submit" style="width:100%"><i data-lucide="log-out"></i> Logout</button>
-                </form>
+                <div class="account" id="account">
+                    <div class="account-menu" id="account-menu">
+                        <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><i data-lucide="circle-user-round"></i>Profile</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"><i data-lucide="log-out"></i>Logout</button>
+                        </form>
+                    </div>
+                    <button class="account-toggle" id="account-toggle" aria-label="Menu akun">
+                        <span class="avatar" style="width:34px;height:34px;font-size:15px">{{ strtoupper(substr(auth()->user()->nama ?? '?', 0, 1)) }}</span>
+                        <span class="account-meta">
+                            <span class="who">{{ auth()->user()->nama }}</span>
+                            <span class="muted" style="color:#a7d8bf">{{ $roleNames[$role] ?? $role }}</span>
+                        </span>
+                        <i data-lucide="chevron-up"></i>
+                    </button>
+                </div>
             </div>
         </aside>
         <div class="overlay" id="sidebar-overlay"></div>
@@ -269,7 +288,20 @@ if (window.lucide) lucide.createIcons();
         });
     });
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeSidebar();
+        if (e.key === 'Escape') {
+            closeSidebar();
+            var acc = document.getElementById('account');
+            if (acc) acc.classList.remove('open');
+        }
+    });
+    var accToggle = document.getElementById('account-toggle');
+    if (accToggle) accToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        document.getElementById('account').classList.toggle('open');
+    });
+    document.addEventListener('click', function (e) {
+        var acc = document.getElementById('account');
+        if (acc && !acc.contains(e.target)) acc.classList.remove('open');
     });
 })();
 document.addEventListener('submit', function (e) {

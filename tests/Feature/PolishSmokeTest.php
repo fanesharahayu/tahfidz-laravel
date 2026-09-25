@@ -49,8 +49,12 @@ class PolishSmokeTest extends TestCase
         $html = $this->actingAs($admin)->get('/admin/users')->assertOk()->getContent();
         $this->assertStringContainsString('<nav class="crumbs"', $html);
         $this->assertStringContainsString('<span class="current">Pengguna</span>', $html);
-        // Tombol logout hanya 1 (di sidebar), tidak ada di topbar kanan atas.
+        // Tombol logout hanya 1 (di dropdown akun), tidak ada di topbar kanan atas.
         $this->assertEquals(1, substr_count($html, 'Logout</button>'), 'Logout harus tepat 1 tombol');
+        // Dropdown akun bawah: toggle + menu berisi Profile dan Logout.
+        $this->assertStringContainsString('id="account-toggle"', $html);
+        $this->assertStringContainsString('id="account-menu"', $html);
+        $this->assertStringContainsString('>Profile</a>', $html);
 
         $html = $this->actingAs($admin)->get('/admin/dashboard')->assertOk()->getContent();
         $this->assertStringContainsString('<span class="current">Dashboard</span>', $html);
