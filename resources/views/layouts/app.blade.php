@@ -206,5 +206,26 @@
         </div>
     </div>
 @endguest
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || form.tagName !== 'FORM' || !form.hasAttribute('data-confirm')) return;
+    e.preventDefault();
+    Swal.fire({
+        title: 'Hapus data?',
+        text: form.getAttribute('data-confirm'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#b91c1c',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+    }).then(function (result) {
+        if (result.isConfirmed) form.submit();
+    });
+});
+</script>
 </body>
 </html>

@@ -111,7 +111,7 @@
                         </select>
                         <button class="btn btn-secondary btn-sm" type="submit">Ubah</button>
                     </form>
-                    <form method="POST" action="{{ route('musyrif.setoran.destroy', $st->id) }}" class="inline-form" onsubmit="return confirm('Hapus setoran ini?')">
+                    <form method="POST" action="{{ route('musyrif.setoran.destroy', $st->id) }}" class="inline-form" data-confirm="Setoran Juz {{ $st->juz }} ({{ $st->surah }}) akan dihapus permanen.">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger btn-sm" type="submit">Hapus</button>

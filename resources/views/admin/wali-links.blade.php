@@ -35,10 +35,10 @@
                 <td>{{ $l->santri->user->nama ?? '-' }}</td>
                 <td><span class="badge badge-gray">{{ $l->relasi ?? '-' }}</span></td>
                 <td>
-                    <form action="{{ url('/admin/wali-link/' . $l->id) }}" method="POST" class="inline-form">
+                    <form action="{{ url('/admin/wali-link/' . $l->id) }}" method="POST" class="inline-form" data-confirm="Hubungan wali-santri ini akan dihapus. Akunnya tidak ikut terhapus.">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Hapus hubungan ini?')">Hapus</button>
+                        <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                     </form>
                 </td>
             </tr>

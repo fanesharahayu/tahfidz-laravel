@@ -36,10 +36,10 @@
                 <td>{{ $u->email }}</td>
                 <td><span class="badge badge-gray">{{ $u->role }}</span></td>
                 <td>
-                    <form action="{{ url('/admin/users/' . $u->id) }}" method="POST" class="inline-form">
+                    <form action="{{ url('/admin/users/' . $u->id) }}" method="POST" class="inline-form" data-confirm="Akun {{ $u->nama }} beserta seluruh datanya akan dihapus permanen.">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Hapus user ini?')">Hapus</button>
+                        <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                     </form>
                 </td>
             </tr>

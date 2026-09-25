@@ -56,7 +56,7 @@
                 <td>{{ $l->santri->kelas ?? '-' }}</td>
                 <td><span class="badge badge-gray">{{ $l->relasi }}</span></td>
                 <td>
-                    <form method="POST" action="{{ route('musyrif.wali-link.destroy', $l->id) }}" class="inline-form" onsubmit="return confirm('Hapus hubungan ini?')">
+                    <form method="POST" action="{{ route('musyrif.wali-link.destroy', $l->id) }}" class="inline-form" data-confirm="Hubungan wali-santri ini akan dihapus. Akunnya tidak ikut terhapus.">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger btn-sm" type="submit">Hapus</button>

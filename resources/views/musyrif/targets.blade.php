@@ -61,7 +61,7 @@
                 <td>{{ $t->tanggal_mulai ?? '-' }}</td>
                 <td>{{ $t->tanggal_selesai ?? '-' }}</td>
                 <td>
-                    <form method="POST" action="{{ route('musyrif.target.destroy', $t->id) }}" class="inline-form" onsubmit="return confirm('Hapus target ini?')">
+                    <form method="POST" action="{{ route('musyrif.target.destroy', $t->id) }}" class="inline-form" data-confirm="Target {{ $t->target_juz }} juz ini akan dihapus permanen.">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger btn-sm" type="submit">Hapus</button>

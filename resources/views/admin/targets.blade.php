@@ -37,10 +37,10 @@
                 <td>{{ $t->tanggal_mulai ? $t->tanggal_mulai->format('Y-m-d') : '-' }}</td>
                 <td>{{ $t->tanggal_selesai ? $t->tanggal_selesai->format('Y-m-d') : '-' }}</td>
                 <td>
-                    <form action="{{ url('/admin/target/' . $t->id) }}" method="POST" class="inline-form">
+                    <form action="{{ url('/admin/target/' . $t->id) }}" method="POST" class="inline-form" data-confirm="Target hafalan ini akan dihapus permanen.">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Hapus target ini?')">Hapus</button>
+                        <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                     </form>
                 </td>
             </tr>
