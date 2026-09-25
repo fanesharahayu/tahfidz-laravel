@@ -40,8 +40,12 @@
         .side-foot .role-badge { margin-top: 6px; }
         .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
         .topbar { background: var(--card); border-bottom: 1px solid var(--line); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 5; }
-        .topbar .page-title { font-size: 18px; font-weight: 700; margin: 0; }
         .topbar .actions { display: flex; align-items: center; gap: 10px; }
+        .crumbs { font-size: 14px; display: flex; align-items: center; flex-wrap: wrap; }
+        .crumbs a { color: var(--muted); text-decoration: none; }
+        .crumbs a:hover { color: var(--green-800); text-decoration: underline; }
+        .crumbs .sep { margin: 0 8px; color: #9ca3af; }
+        .crumbs .current { font-weight: 700; color: var(--ink); }
         .container { max-width: 1080px; width: 100%; margin: 0 auto; padding: 24px; }
 
         /* ===== Guest (login) ===== */
@@ -153,6 +157,24 @@
             ],
         ];
         $roleNames = ['admin' => 'Admin', 'musyrif' => 'Musyrif', 'santri' => 'Santri', 'wali' => 'Wali Santri'];
+        $breadcrumbMap = [
+            'admin.dashboard' => [['Dashboard', null]],
+            'admin.users.index' => [['Dashboard', 'admin.dashboard'], ['Pengguna', null]],
+            'admin.targets.index' => [['Dashboard', 'admin.dashboard'], ['Target', null]],
+            'admin.wali-links.index' => [['Dashboard', 'admin.dashboard'], ['Wali–Santri', null]],
+            'musyrif.dashboard' => [['Dashboard', null]],
+            'musyrif.binaan.index' => [['Dashboard', 'musyrif.dashboard'], ['Binaan', null]],
+            'musyrif.setoran.index' => [['Dashboard', 'musyrif.dashboard'], ['Setoran', null]],
+            'musyrif.targets.index' => [['Dashboard', 'musyrif.dashboard'], ['Target', null]],
+            'musyrif.wali.index' => [['Dashboard', 'musyrif.dashboard'], ['Wali', null]],
+            'musyrif.santri.detail' => [['Dashboard', 'musyrif.dashboard'], ['Binaan', 'musyrif.binaan.index'], ['Detail Santri', null]],
+            'santri.dashboard' => [['Dashboard', null]],
+            'wali.dashboard' => [['Dashboard', null]],
+            'wali.child.detail' => [['Dashboard', 'wali.dashboard'], ['Detail Anak', null]],
+            'profil.show' => [['Profil', null]],
+            'password.edit' => [['Profil', 'profil.show'], ['Ganti Password', null]],
+        ];
+        $crumbs = $breadcrumbMap[request()->route()?->getName() ?? ''] ?? [[trim($__env->yieldContent('title', 'Dashboard')), null]];
     @endphp
     <div class="shell">
         <aside class="sidebar">
@@ -180,13 +202,18 @@
         </aside>
         <div class="main">
             <div class="topbar">
-                <p class="page-title">@yield('title', 'Dashboard')</p>
+                <nav class="crumbs" aria-label="Breadcrumb">
+                    @foreach ($crumbs as $i => [$label, $crumbRoute])
+                        @if ($i > 0)<span class="sep">/</span>@endif
+                        @if ($crumbRoute)
+                            <a href="{{ route($crumbRoute) }}">{{ $label }}</a>
+                        @else
+                            <span class="current">{{ $label }}</span>
+                        @endif
+                    @endforeach
+                </nav>
                 <div class="actions">
                     <span class="muted">{{ auth()->user()->nama }} · {{ $roleNames[$role] ?? $role }}</span>
-                    <form action="{{ route('logout') }}" method="POST" class="inline-form">
-                        @csrf
-                        <button class="btn btn-danger btn-sm" type="submit">Logout</button>
-                    </form>
                 </div>
             </div>
             <div class="container">
