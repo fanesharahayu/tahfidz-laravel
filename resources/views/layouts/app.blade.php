@@ -76,7 +76,8 @@
             color-scheme: dark;
         }
         [data-theme="dark"] table { background: var(--card); }
-        [data-theme="dark"] th { background: #0e1a14; }
+        [data-theme="dark"] th { background: #1c3327; color: #c4d6cb; }
+        [data-theme="dark"] .stat .num { color: #a7f3d0; }
         [data-theme="dark"] tbody tr:hover { background: #15241c; }
         [data-theme="dark"] .input, [data-theme="dark"] select.input, [data-theme="dark"] textarea.input { background: #0e1a14; border-color: #2c4a3a; color: var(--ink); }
         [data-theme="dark"] label { color: #c4d6cb; }
@@ -95,6 +96,8 @@
         [data-theme="dark"] .account-menu { background: #14261d; }
         [data-theme="dark"] .account-menu a, [data-theme="dark"] .account-menu button { color: #e7f0eb; }
         [data-theme="dark"] .account-menu a:hover, [data-theme="dark"] .account-menu button:hover { background: #1d3529; }
+        [data-theme="dark"] .account-menu .logout-btn { color: #fca5a5; }
+        [data-theme="dark"] .account-menu .logout-btn:hover { background: #450a0a; }
         [data-theme="dark"] .hamburger { background: var(--card); color: var(--ink); }
         [data-theme="dark"] .guest-card { background: var(--card); }
         [data-theme="dark"] .guest-form { color: var(--ink); }
