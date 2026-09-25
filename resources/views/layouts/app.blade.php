@@ -43,11 +43,13 @@
         .account-toggle .who { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .account-toggle > svg { width: 18px; height: 18px; flex-shrink: 0; transition: transform .2s; }
         .account.open .account-toggle > svg { transform: rotate(180deg); }
-        .account-menu { display: none; position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
-        .account.open .account-menu { display: block; }
+        .account-menu { opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .18s ease, transform .18s ease, visibility .18s; position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+        .account.open .account-menu { opacity: 1; visibility: visible; transform: none; }
         .account-menu a, .account-menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 14px; font-size: 14px; color: var(--ink); text-decoration: none; background: none; border: 0; cursor: pointer; }
         .account-menu a:hover, .account-menu button:hover { background: #f3f4f6; }
         .account-menu a.active { font-weight: 700; color: var(--green-800); }
+        .account-menu .logout-btn { color: #b91c1c; font-weight: 600; }
+        .account-menu .logout-btn:hover { background: var(--red-bg); }
         .account-menu svg { width: 16px; height: 16px; flex-shrink: 0; }
         .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
         .topbar { background: var(--card); border-bottom: 1px solid var(--line); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 5; }
@@ -218,7 +220,7 @@
                         <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><i data-lucide="circle-user-round"></i>Profile</a>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit"><i data-lucide="log-out"></i>Logout</button>
+                            <button type="submit" class="logout-btn"><i data-lucide="log-out"></i>Logout</button>
                         </form>
                     </div>
                     <button class="account-toggle" id="account-toggle" aria-label="Menu akun">
