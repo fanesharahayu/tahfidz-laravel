@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MusyrifController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SantriController;
 use App\Http\Controllers\WaliController;
 use Illuminate\Support\Facades\Route;
@@ -22,16 +23,44 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
     Route::get('/ganti-password', [AuthController::class, 'showChangePassword'])->name('password.edit');
     Route::post('/ganti-password', [AuthController::class, 'changePassword'])->name('password.update');
 
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/users', [AdminController::class, 'usersIndex'])->name('users.index');
+        Route::post('/users', [AdminController::class, 'usersStore'])->name('users.store');
+        Route::delete('/users/{id}', [AdminController::class, 'usersDestroy'])->name('users.destroy');
+        Route::post('/santri', [AdminController::class, 'santriStore'])->name('santri.store');
+        Route::match(['put', 'patch'], '/santri/{id}', [AdminController::class, 'santriUpdate'])->name('santri.update');
+        Route::post('/target', [AdminController::class, 'targetStore'])->name('target.store');
+        Route::delete('/target/{id}', [AdminController::class, 'targetDestroy'])->name('target.destroy');
+        Route::get('/wali-links', [AdminController::class, 'waliLinksIndex'])->name('wali-links.index');
+        Route::post('/wali-link', [AdminController::class, 'waliLinksStore'])->name('wali-links.store');
+        Route::delete('/wali-link/{id}', [AdminController::class, 'waliLinksDestroy'])->name('wali-links.destroy');
+        Route::post('/setoran', [AdminController::class, 'setoranStore'])->name('setoran.store');
+        Route::match(['put', 'patch'], '/setoran/{id}', [AdminController::class, 'setoranUpdate'])->name('setoran.update');
+        Route::delete('/setoran/{id}', [AdminController::class, 'setoranDestroy'])->name('setoran.destroy');
     });
 
     Route::middleware('role:musyrif')->prefix('musyrif')->name('musyrif.')->group(function () {
         Route::get('/dashboard', [MusyrifController::class, 'dashboard'])->name('dashboard');
+        Route::get('/binaan', [MusyrifController::class, 'binaanIndex'])->name('binaan.index');
+        Route::get('/setoran', [MusyrifController::class, 'setoranIndex'])->name('setoran.index');
+        Route::get('/targets', [MusyrifController::class, 'targetIndex'])->name('targets.index');
+        Route::post('/target', [MusyrifController::class, 'targetStore'])->name('target.store');
+        Route::delete('/target/{id}', [MusyrifController::class, 'targetDestroy'])->name('target.destroy');
+        Route::post('/santri', [MusyrifController::class, 'santriStore'])->name('santri.store');
+        Route::get('/santri/unassigned', [MusyrifController::class, 'unassigned'])->name('santri.unassigned');
+        Route::post('/santri/{santriId}/setoran', [MusyrifController::class, 'setoranStore'])->name('setoran.store');
+        Route::post('/santri/{santriId}/assign', [MusyrifController::class, 'assign'])->name('santri.assign');
         Route::get('/santri/{santriId}', [MusyrifController::class, 'santriDetail'])->name('santri.detail');
+        Route::put('/setoran/{id}', [MusyrifController::class, 'setoranUpdate'])->name('setoran.update');
+        Route::delete('/setoran/{id}', [MusyrifController::class, 'setoranDestroy'])->name('setoran.destroy');
+        Route::get('/wali', [MusyrifController::class, 'waliLinksIndex'])->name('wali.index');
+        Route::post('/wali-link', [MusyrifController::class, 'waliLinkStore'])->name('wali-link.store');
+        Route::delete('/wali-link/{id}', [MusyrifController::class, 'waliLinkDestroy'])->name('wali-link.destroy');
     });
 
     Route::middleware('role:santri')->prefix('santri')->name('santri.')->group(function () {
