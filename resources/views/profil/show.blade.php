@@ -73,5 +73,23 @@
             @endforeach
         </table></div>
     @endif
+    @php($otherCount = collect($sessions)->where('is_current', false)->count())
+    @if ($otherCount > 0)
+        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:16px">
+            <h3 style="margin-top:0">Akhiri {{ $otherCount }} sesi lain?</h3>
+            <p class="muted">Perangkat lain akan langsung logout. Perangkat ini tetap login. Masukkan password untuk konfirmasi.</p>
+            <form method="POST" action="{{ route('profil.sessions.destroyOthers') }}" data-confirm="{{ $otherCount }} sesi lain akan diakhiri sekarang.">
+                @csrf
+                @method('DELETE')
+                <div class="form-grid">
+                    <div class="full">
+                        <label>Password</label>
+                        <input class="input" type="password" name="password" required placeholder="Password akun ini">
+                    </div>
+                </div>
+                <button class="btn btn-danger" type="submit"><i data-lucide="log-out"></i> Akhiri Sesi Lain</button>
+            </form>
+        </div>
+    @endif
 </div>
 @endsection

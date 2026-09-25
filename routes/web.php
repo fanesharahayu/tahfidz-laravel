@@ -24,6 +24,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
+    Route::delete('/profil/sesi-lain', [ProfilController::class, 'destroyOthers'])->name('profil.sessions.destroyOthers');
     Route::get('/ganti-password', [AuthController::class, 'showChangePassword'])->name('password.edit');
     Route::post('/ganti-password', [AuthController::class, 'changePassword'])->name('password.update');
 

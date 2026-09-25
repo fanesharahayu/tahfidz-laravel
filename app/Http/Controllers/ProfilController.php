@@ -6,7 +6,9 @@ use App\Helpers\UserAgentParser;
 use App\Models\Santri;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ProfilController extends Controller
 {
@@ -34,6 +36,42 @@ class ProfilController extends Controller
             'jumlahBinaan' => $jumlahBinaan,
             'sessions' => $this->activeSessions($request),
         ]);
+    }
+
+    /**
+     * Akhiri semua sesi lain milik user (berlaku semua role).
+     * Verifikasi password dulu, lalu hapus baris sesi lain + cabut remember-token.
+     */
+    public function destroyOthers(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = $request->user();
+
+        if (! Hash::check($request->input('password'), $user->password)) {
+            return back()->withErrors(['password' => 'Password salah. Sesi lain tidak diakhiri.']);
+        }
+
+        // Cabut cookie "ingat saya" di perangkat lain.
+        try {
+            Auth::logoutOtherDevices($request->input('password'));
+        } catch (\Throwable $e) {
+            // lanjut: sesi database tetap dibersihkan di bawah
+        }
+
+        // Hapus sesi database milik perangkat lain (sesi ini dipertahankan).
+        try {
+            DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->where('id', '!=', $request->session()->getId())
+                ->delete();
+        } catch (\Throwable $e) {
+            // driver bukan database: tidak ada yang perlu dihapus
+        }
+
+        return back()->with('status', 'Semua sesi lain berhasil diakhiri.');
     }
 
     /**
