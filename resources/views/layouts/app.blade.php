@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Tahfidz') - Monitoring Hafalan Al-Qur'an</title>
+    <script>
+    try { var t = localStorage.getItem('tahfidz-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+    </script>
     <style>
         :root {
             --green-900: #052e1b; --green-800: #065f46; --green-700: #047857;
@@ -35,7 +38,13 @@
         .snav a svg { width: 18px; height: 18px; flex-shrink: 0; }
         .btn svg { width: 15px; height: 15px; vertical-align: -2px; }
         h2 svg { width: 22px; height: 22px; vertical-align: -3px; }
-        .side-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,.12); }
+        .side-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-direction: column; gap: 8px; }
+        .theme-toggle { width: 100%; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .theme-toggle:hover { background: rgba(255,255,255,.15); }
+        .theme-toggle svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .theme-toggle .icon-sun, .theme-toggle .label-light { display: none; }
+        [data-theme="dark"] .theme-toggle .icon-sun, [data-theme="dark"] .theme-toggle .label-light { display: block; }
+        [data-theme="dark"] .theme-toggle .icon-moon, [data-theme="dark"] .theme-toggle .label-dark { display: none; }
         .account { position: relative; }
         .account-toggle { width: 100%; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 10px; padding: 8px 10px; cursor: pointer; text-align: left; font-size: 14px; }
         .account-toggle:hover { background: rgba(255,255,255,.15); }
@@ -63,6 +72,43 @@
         .crumbs a:hover { color: var(--green-800); text-decoration: underline; }
         .crumbs .sep { margin: 0 8px; color: #9ca3af; }
         .crumbs .current { font-weight: 700; color: var(--ink); }
+
+        /* ===== Dark mode ===== */
+        [data-theme="dark"] {
+            --bg: #0b1512; --card: #111f19; --ink: #e7f0eb; --muted: #93a89c; --line: #22362c;
+            color-scheme: dark;
+        }
+        [data-theme="dark"] table { background: var(--card); }
+        [data-theme="dark"] th { background: #0e1a14; }
+        [data-theme="dark"] tbody tr:hover { background: #15241c; }
+        [data-theme="dark"] .input, [data-theme="dark"] select.input, [data-theme="dark"] textarea.input { background: #0e1a14; border-color: #2c4a3a; color: var(--ink); }
+        [data-theme="dark"] label { color: #c4d6cb; }
+        [data-theme="dark"] code { background: #22362c; padding: 1px 5px; border-radius: 4px; }
+        [data-theme="dark"] .btn-secondary { background: #14261d; border-color: #2c4a3a; color: #a7f3d0; }
+        [data-theme="dark"] .btn-secondary:hover { background: #1a3125; }
+        [data-theme="dark"] .subnav a { background: var(--card); border-color: var(--line); color: #c4d6cb; }
+        [data-theme="dark"] .badge-gray { background: #22362c; color: #c4d6cb; }
+        [data-theme="dark"] .badge-green { background: #064e3b; color: #a7f3d0; }
+        [data-theme="dark"] .badge-amber { background: #453003; color: #fcd34d; }
+        [data-theme="dark"] .badge-red { background: #450a0a; color: #fca5a5; }
+        [data-theme="dark"] .badge-blue { background: #172554; color: #bfdbfe; }
+        [data-theme="dark"] .alert { background: #2a0f0f; border-color: #7f1d1d; color: #fca5a5; }
+        [data-theme="dark"] .success { background: #052e1b; border-color: #065f46; color: #a7f3d0; }
+        [data-theme="dark"] .progress { background: #22362c; }
+        [data-theme="dark"] .account-menu { background: #14261d; }
+        [data-theme="dark"] .account-menu a, [data-theme="dark"] .account-menu button { color: #e7f0eb; }
+        [data-theme="dark"] .account-menu a:hover, [data-theme="dark"] .account-menu button:hover { background: #1d3529; }
+        [data-theme="dark"] .hamburger { background: var(--card); color: var(--ink); }
+        [data-theme="dark"] .guest-card { background: var(--card); }
+        [data-theme="dark"] .guest-form { color: var(--ink); }
+        /* Glow saat dark mode */
+        [data-theme="dark"] .brand .logo { text-shadow: 0 0 18px rgba(110,231,183,.8); }
+        [data-theme="dark"] .stat { border-color: rgba(52,211,153,.4); box-shadow: 0 0 16px rgba(52,211,153,.18); }
+        [data-theme="dark"] .card { box-shadow: 0 0 14px rgba(52,211,153,.08); }
+        [data-theme="dark"] .btn { box-shadow: 0 0 12px rgba(5,150,105,.45); }
+        [data-theme="dark"] .snav a.active { box-shadow: 0 0 12px rgba(110,231,183,.35); }
+        [data-theme="dark"] .avatar { box-shadow: 0 0 14px rgba(52,211,153,.5); }
+        [data-theme="dark"] .account-toggle, [data-theme="dark"] .theme-toggle { box-shadow: 0 0 10px rgba(52,211,153,.15); }
         .container { max-width: 1080px; width: 100%; margin: 0 auto; padding: 24px; }
 
         /* ===== Guest (login) ===== */
@@ -248,6 +294,12 @@
                         <i data-lucide="chevron-up"></i>
                     </button>
                 </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Ganti mode gelap terang">
+                    <i data-lucide="moon" class="icon-moon"></i>
+                    <i data-lucide="sun" class="icon-sun"></i>
+                    <span class="label-dark">Mode Gelap</span>
+                    <span class="label-light">Mode Terang</span>
+                </button>
             </div>
         </aside>
         <div class="overlay" id="sidebar-overlay"></div>
@@ -292,6 +344,15 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
+(function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) themeBtn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('tahfidz-theme', next); } catch (e) {}
+    });
+})();
 (function () {
     function closeSidebar() { document.body.classList.remove('sidebar-open'); }
     var burger = document.getElementById('hamburger');

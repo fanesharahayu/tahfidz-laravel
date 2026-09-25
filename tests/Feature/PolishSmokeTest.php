@@ -62,6 +62,11 @@ class PolishSmokeTest extends TestCase
         $this->assertStringContainsString('id="hamburger"', $html);
         $this->assertStringContainsString('id="sidebar-overlay"', $html);
         $this->assertStringContainsString('sidebar-open', $html);
+        // Toggle dark/light di sidebar bawah + tidak ada emoji.
+        $this->assertStringContainsString('id="theme-toggle"', $html);
+        $this->assertStringContainsString('data-lucide="moon"', $html);
+        $this->assertStringContainsString('data-lucide="sun"', $html);
+        $this->assertStringNotContainsString('👋', $html);
     }
 
     public function test_sidebar_highlights_exactly_one_item(): void
