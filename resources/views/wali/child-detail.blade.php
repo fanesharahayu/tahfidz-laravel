@@ -9,7 +9,7 @@
         <p class="muted">Kelas {{ $santri->kelas ?? '-' }} · Musyrif {{ $santri->musyrif->nama ?? '-' }}</p>
     </div>
     <div>
-        <a class="btn btn-secondary btn-sm" href="{{ route('wali.dashboard') }}">← Kembali</a>
+        <a class="btn btn-secondary btn-sm" href="{{ route('wali.dashboard') }}"><i data-lucide="arrow-left"></i> Kembali</a>
     </div>
 </div>
 

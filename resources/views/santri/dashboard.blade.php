@@ -5,7 +5,7 @@
 @section('content')
 <div class="page-head">
     <div>
-        <h2>Halo, {{ $santri->user->nama }} 👋</h2>
+        <h2>Halo, {{ $santri->user->nama }} <i data-lucide="waving-hand"></i></h2>
         <p class="muted">Musyrif: {{ $santri->musyrif->nama ?? '-' }} · Kelas {{ $santri->kelas ?? '-' }}</p>
     </div>
 </div>
@@ -56,7 +56,7 @@
                 <td class="muted">{{ $st->created_at }}</td>
             </tr>
         @empty
-            <tr><td colspan="5" class="muted">Belum ada setoran. Semangat menyetor! 💪</td></tr>
+            <tr><td colspan="5" class="muted">Belum ada setoran. Semangat menyetor!</td></tr>
         @endforelse
     </table></div>
 </div>

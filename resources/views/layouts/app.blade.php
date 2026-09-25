@@ -32,7 +32,9 @@
         .snav a { color: #dcefe4; text-decoration: none; padding: 9px 12px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 10px; }
         .snav a:hover { background: rgba(255,255,255,.1); }
         .snav a.active { background: rgba(255,255,255,.16); font-weight: 600; }
-        .snav a .ico { width: 20px; text-align: center; opacity: .85; }
+        .snav a svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .btn svg { width: 15px; height: 15px; vertical-align: -2px; }
+        h2 svg { width: 22px; height: 22px; vertical-align: -3px; }
         .side-foot { padding: 14px; border-top: 1px solid rgba(255,255,255,.12); font-size: 13px; }
         .side-foot .who { font-weight: 600; }
         .side-foot .role-badge { margin-top: 6px; }
@@ -131,23 +133,23 @@
         $role = auth()->user()->role;
         $nav = [
             'admin' => [
-                ['Dashboard', 'admin.dashboard', '▦'],
-                ['Pengguna', 'admin.users.index', '◉'],
-                ['Target', 'admin.targets.index', '◎'],
-                ['Wali–Santri', 'admin.wali-links.index', '⬔'],
+                ['Dashboard', 'admin.dashboard', 'layout-dashboard'],
+                ['Pengguna', 'admin.users.index', 'users'],
+                ['Target', 'admin.targets.index', 'target'],
+                ['Wali–Santri', 'admin.wali-links.index', 'heart-handshake'],
             ],
             'musyrif' => [
-                ['Dashboard', 'musyrif.dashboard', '▦'],
-                ['Binaan', 'musyrif.binaan.index', '◉'],
-                ['Setoran', 'musyrif.setoran.index', '✎'],
-                ['Target', 'musyrif.targets.index', '◎'],
-                ['Wali', 'musyrif.wali.index', '⬔'],
+                ['Dashboard', 'musyrif.dashboard', 'layout-dashboard'],
+                ['Binaan', 'musyrif.binaan.index', 'graduation-cap'],
+                ['Setoran', 'musyrif.setoran.index', 'notebook-pen'],
+                ['Target', 'musyrif.targets.index', 'target'],
+                ['Wali', 'musyrif.wali.index', 'heart-handshake'],
             ],
             'santri' => [
-                ['Dashboard', 'santri.dashboard', '▦'],
+                ['Dashboard', 'santri.dashboard', 'layout-dashboard'],
             ],
             'wali' => [
-                ['Dashboard', 'wali.dashboard', '▦'],
+                ['Dashboard', 'wali.dashboard', 'layout-dashboard'],
             ],
         ];
         $roleNames = ['admin' => 'Admin', 'musyrif' => 'Musyrif', 'santri' => 'Santri', 'wali' => 'Wali Santri'];
@@ -160,12 +162,11 @@
             </div>
             <nav class="snav">
                 <div class="group">Menu {{ $roleNames[$role] ?? $role }}</div>
-                @foreach (($nav[$role] ?? []) as [$label, $route, $ico])
-                    <a href="{{ route($route) }}" class="{{ request()->routeIs($route) ? 'active' : '' }}"><span class="ico">{{ $ico }}</span>{{ $label }}</a>
+                @foreach (($nav[$role] ?? []) as [$label, $route, $icon])
+                    <a href="{{ route($route) }}" class="{{ request()->routeIs($route) ? 'active' : '' }}"><i data-lucide="{{ $icon }}"></i>{{ $label }}</a>
                 @endforeach
                 <div class="group">Akun</div>
-                <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><span class="ico">◍</span>Profil</a>
-                <a href="{{ route('password.edit') }}" class="{{ request()->routeIs('password.*') ? 'active' : '' }}"><span class="ico">✦</span>Ganti Password</a>
+                <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><i data-lucide="circle-user-round"></i>Profil</a>
             </nav>
             <div class="side-foot">
                 <div class="who">{{ auth()->user()->nama }}</div>
@@ -207,7 +208,9 @@
     </div>
 @endguest
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
+if (window.lucide) lucide.createIcons();
 document.addEventListener('submit', function (e) {
     var form = e.target;
     if (!form || form.tagName !== 'FORM' || !form.hasAttribute('data-confirm')) return;

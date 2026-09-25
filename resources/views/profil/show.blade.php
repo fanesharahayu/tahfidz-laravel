@@ -38,7 +38,7 @@
         </tbody>
     </table></div>
     <div style="margin-top:16px;display:flex;gap:8px">
-        <a href="{{ route('password.edit') }}" class="btn btn-secondary">Ganti Password</a>
+        <a href="{{ route('password.edit') }}" class="btn btn-secondary"><i data-lucide="key-round"></i> Ganti Password</a>
     </div>
 </div>
 @endsection

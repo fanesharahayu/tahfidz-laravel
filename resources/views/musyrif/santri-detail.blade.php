@@ -9,7 +9,7 @@
         <p class="muted">Kelas {{ $santri->kelas ?? '-' }} · NIS {{ $santri->nis ?? '-' }}</p>
     </div>
     <div>
-        <a class="btn btn-secondary btn-sm" href="{{ route('musyrif.binaan.index') }}">← Kembali</a>
+        <a class="btn btn-secondary btn-sm" href="{{ route('musyrif.binaan.index') }}"><i data-lucide="arrow-left"></i> Kembali</a>
     </div>
 </div>
 

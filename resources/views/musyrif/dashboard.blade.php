@@ -9,7 +9,7 @@
         <p class="muted">{{ $binaan->count() }} santri binaan · {{ $setoran->count() }} setoran terbaru</p>
     </div>
     <div>
-        <a class="btn btn-sm" href="{{ route('musyrif.setoran.index') }}">✎ Catat Setoran</a>
+        <a class="btn btn-sm" href="{{ route('musyrif.setoran.index') }}"><i data-lucide="notebook-pen"></i> Catat Setoran</a>
         <a class="btn btn-secondary btn-sm" href="{{ route('musyrif.binaan.index') }}">Kelola Binaan</a>
     </div>
 </div>

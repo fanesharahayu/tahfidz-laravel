@@ -14,7 +14,7 @@
     <div class="card">
         <div class="page-head" style="margin-bottom:8px">
             <h3 style="margin:0">{{ $s->user->nama }} <span class="badge badge-gray">{{ $s->relasi }}</span></h3>
-            <a class="btn btn-sm" href="{{ route('wali.child.detail', $s->id) }}">Lihat Detail →</a>
+            <a class="btn btn-sm" href="{{ route('wali.child.detail', $s->id) }}">Lihat Detail <i data-lucide="arrow-right"></i></a>
         </div>
         <p class="muted">Kelas {{ $s->kelas ?? '-' }} · Musyrif {{ $s->musyrif->nama ?? '-' }} · {{ $s->setoranCount }}x setoran</p>
         <div class="progress-row">
