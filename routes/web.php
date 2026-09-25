@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{id}', [AdminController::class, 'usersDestroy'])->name('users.destroy');
         Route::post('/santri', [AdminController::class, 'santriStore'])->name('santri.store');
         Route::match(['put', 'patch'], '/santri/{id}', [AdminController::class, 'santriUpdate'])->name('santri.update');
+        Route::get('/targets', [AdminController::class, 'targetIndex'])->name('targets.index');
         Route::post('/target', [AdminController::class, 'targetStore'])->name('target.store');
         Route::delete('/target/{id}', [AdminController::class, 'targetDestroy'])->name('target.destroy');
         Route::get('/wali-links', [AdminController::class, 'waliLinksIndex'])->name('wali-links.index');

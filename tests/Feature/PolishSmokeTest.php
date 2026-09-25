@@ -42,4 +42,26 @@ class PolishSmokeTest extends TestCase
         $this->post('/logout');
         $this->get('/login')->assertOk();
     }
+
+    public function test_sidebar_highlights_exactly_one_item(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $musyrif = User::factory()->create(['role' => 'musyrif']);
+
+        foreach ([
+            [$admin, '/admin/dashboard'],
+            [$admin, '/admin/users'],
+            [$admin, '/admin/targets'],
+            [$admin, '/admin/wali-links'],
+            [$musyrif, '/musyrif/dashboard'],
+            [$musyrif, '/musyrif/targets'],
+        ] as [$user, $uri]) {
+            $html = $this->actingAs($user)->get($uri)->assertOk()->getContent();
+            $this->assertEquals(
+                1,
+                substr_count($html, 'class="active"'),
+                "Sidebar harus highlight tepat 1 item di {$uri}"
+            );
+        }
+    }
 }

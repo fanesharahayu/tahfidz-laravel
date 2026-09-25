@@ -172,6 +172,17 @@ class AdminController extends Controller
         return redirect()->back()->with('status', 'Santri berhasil diperbarui');
     }
 
+    public function targetIndex()
+    {
+        $targets = TargetHafalan::with('santri.user')->latest()->get();
+        $santriList = Santri::with('user')->get();
+
+        return view('admin.targets', [
+            'targets' => $targets,
+            'santriList' => $santriList,
+        ]);
+    }
+
     public function targetStore(Request $request)
     {
         $validated = $request->validate([

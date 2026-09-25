@@ -131,23 +131,23 @@
         $role = auth()->user()->role;
         $nav = [
             'admin' => [
-                ['Dashboard', route('admin.dashboard'), '▦'],
-                ['Pengguna', route('admin.users.index'), '◉'],
-                ['Target', url('/admin/dashboard'), '◎'],
-                ['Wali–Santri', route('admin.wali-links.index'), '⬔'],
+                ['Dashboard', 'admin.dashboard', '▦'],
+                ['Pengguna', 'admin.users.index', '◉'],
+                ['Target', 'admin.targets.index', '◎'],
+                ['Wali–Santri', 'admin.wali-links.index', '⬔'],
             ],
             'musyrif' => [
-                ['Dashboard', route('musyrif.dashboard'), '▦'],
-                ['Binaan', route('musyrif.binaan.index'), '◉'],
-                ['Setoran', route('musyrif.setoran.index'), '✎'],
-                ['Target', route('musyrif.targets.index'), '◎'],
-                ['Wali', route('musyrif.wali.index'), '⬔'],
+                ['Dashboard', 'musyrif.dashboard', '▦'],
+                ['Binaan', 'musyrif.binaan.index', '◉'],
+                ['Setoran', 'musyrif.setoran.index', '✎'],
+                ['Target', 'musyrif.targets.index', '◎'],
+                ['Wali', 'musyrif.wali.index', '⬔'],
             ],
             'santri' => [
-                ['Dashboard', route('santri.dashboard'), '▦'],
+                ['Dashboard', 'santri.dashboard', '▦'],
             ],
             'wali' => [
-                ['Dashboard', route('wali.dashboard'), '▦'],
+                ['Dashboard', 'wali.dashboard', '▦'],
             ],
         ];
         $roleNames = ['admin' => 'Admin', 'musyrif' => 'Musyrif', 'santri' => 'Santri', 'wali' => 'Wali Santri'];
@@ -160,8 +160,8 @@
             </div>
             <nav class="snav">
                 <div class="group">Menu {{ $roleNames[$role] ?? $role }}</div>
-                @foreach (($nav[$role] ?? []) as [$label, $url, $ico])
-                    <a href="{{ $url }}" class="{{ request()->url() === $url ? 'active' : '' }}"><span class="ico">{{ $ico }}</span>{{ $label }}</a>
+                @foreach (($nav[$role] ?? []) as [$label, $route, $ico])
+                    <a href="{{ route($route) }}" class="{{ request()->routeIs($route) ? 'active' : '' }}"><span class="ico">{{ $ico }}</span>{{ $label }}</a>
                 @endforeach
                 <div class="group">Akun</div>
                 <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><span class="ico">◍</span>Profil</a>
