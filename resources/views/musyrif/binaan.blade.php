@@ -3,17 +3,12 @@
 @section('title', 'Santri Binaan')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Santri Binaan</h2>
         <p class="muted">{{ $binaan->count() }} binaan · {{ $unassigned->count() }} menunggu musyrif</p>
     </div>
 </div>
-
-@if ($errors->any())
-    <div class="alert">{{ $errors->first() }}</div>
-@endif
 
 <div class="card">
     <h3>Daftar Binaan ({{ $binaan->count() }})</h3>

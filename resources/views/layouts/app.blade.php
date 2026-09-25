@@ -192,7 +192,7 @@
                 @if (session('status'))
                     <div class="success">{{ session('status') }}</div>
                 @endif
-                @if ($errors->any() && !isset($hideLayoutErrors))
+                @if ($errors->any())
                     <div class="alert">
                         <ul style="margin:0;padding-left:18px">
                             @foreach ($errors->all() as $error)

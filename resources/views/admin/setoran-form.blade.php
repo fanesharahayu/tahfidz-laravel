@@ -3,27 +3,12 @@
 @section('title', isset($setoran) ? 'Ubah Setoran' : 'Tambah Setoran')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>{{ isset($setoran) ? 'Ubah Setoran' : 'Tambah Setoran' }}</h2>
         <p class="muted">{{ isset($setoran) ? 'Koreksi data setoran yang sudah tercatat.' : 'Catat setoran hafalan atas nama admin.' }}</p>
     </div>
 </div>
-
-@if (session('status'))
-    <div class="success">{{ session('status') }}</div>
-@endif
-
-@if ($errors->any())
-    <div class="alert">
-        <ul style="margin:0;padding-left:18px">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
 <div class="card">
     @if (isset($setoran))

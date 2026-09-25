@@ -3,7 +3,6 @@
 @section('title', 'Ganti Password')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Ganti Password</h2>
@@ -11,9 +10,6 @@
     </div>
 </div>
 <div class="card" style="max-width:480px">
-    @if ($errors->any())
-        <div class="alert">{{ $errors->first() }}</div>
-    @endif
     <form method="POST" action="{{ route('password.update') }}">
         @csrf
         <label>Password lama</label>

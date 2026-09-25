@@ -3,17 +3,12 @@
 @section('title', 'Relasi Wali Binaan')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Relasi Wali Santri Binaan</h2>
         <p class="muted">Hubungkan akun wali dengan santri binaan agar bisa memantau.</p>
     </div>
 </div>
-
-@if ($errors->any())
-    <div class="alert">{{ $errors->first() }}</div>
-@endif
 
 <div class="card">
     <h3>Hubungkan Wali – Santri</h3>

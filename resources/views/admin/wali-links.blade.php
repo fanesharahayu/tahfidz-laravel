@@ -3,27 +3,12 @@
 @section('title', 'Hubungan Wali-Santri')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Hubungan Wali–Santri</h2>
         <p class="muted">Kelola akses wali terhadap santri.</p>
     </div>
 </div>
-
-@if (session('status'))
-    <div class="success">{{ session('status') }}</div>
-@endif
-
-@if ($errors->any())
-    <div class="alert">
-        <ul style="margin:0;padding-left:18px">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
 <div class="card">
     <h3>Daftar Hubungan</h3>

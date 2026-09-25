@@ -3,17 +3,12 @@
 @section('title', 'Setoran Binaan')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Setoran Santri Binaan</h2>
         <p class="muted">Catat dan kelola setoran hafalan binaan.</p>
     </div>
 </div>
-
-@if ($errors->any())
-    <div class="alert">{{ $errors->first() }}</div>
-@endif
 
 <div class="card">
     <h3>Catat Setoran</h3>

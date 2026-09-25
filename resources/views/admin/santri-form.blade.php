@@ -3,27 +3,12 @@
 @section('title', isset($santri) ? 'Ubah Santri' : 'Tambah Santri')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>{{ isset($santri) ? 'Ubah Santri' : 'Tambah Santri' }}</h2>
         <p class="muted">{{ isset($santri) ? 'Perbarui data, penugasan musyrif, dan target.' : 'Buatkan akun santri baru beserta datanya.' }}</p>
     </div>
 </div>
-
-@if (session('status'))
-    <div class="success">{{ session('status') }}</div>
-@endif
-
-@if ($errors->any())
-    <div class="alert">
-        <ul style="margin:0;padding-left:18px">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
 <div class="card">
     @if (isset($santri))

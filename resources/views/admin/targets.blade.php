@@ -3,27 +3,12 @@
 @section('title', 'Target Hafalan')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Target Hafalan</h2>
         <p class="muted">Tetapkan target juz per santri per periode.</p>
     </div>
 </div>
-
-@if (session('status'))
-    <div class="success">{{ session('status') }}</div>
-@endif
-
-@if ($errors->any())
-    <div class="alert">
-        <ul style="margin:0;padding-left:18px">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
 <div class="card">
     <h3>Daftar Target</h3>

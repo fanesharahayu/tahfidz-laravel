@@ -3,17 +3,12 @@
 @section('title', 'Target Hafalan Binaan')
 
 @section('content')
-@php($hideLayoutErrors = true)
 <div class="page-head">
     <div>
         <h2>Target Hafalan Binaan</h2>
         <p class="muted">Tetapkan dan kelola target juz santri binaan.</p>
     </div>
 </div>
-
-@if ($errors->any())
-    <div class="alert">{{ $errors->first() }}</div>
-@endif
 
 <div class="card">
     <h3>Buat Target</h3>
