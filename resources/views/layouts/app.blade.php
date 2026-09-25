@@ -103,6 +103,7 @@
         [data-theme="dark"] .guest-form { color: var(--ink); }
         /* Glow halus saat dark mode: hanya icon menu yang aktif */
         [data-theme="dark"] .snav a.active svg { filter: drop-shadow(0 0 5px rgba(110,231,183,.9)); }
+        [data-theme="dark"] tr.active-session { background: #064e3b !important; }
         .container { max-width: 1080px; width: 100%; margin: 0 auto; padding: 24px; }
 
         /* ===== Guest (login) ===== */
@@ -209,6 +210,7 @@
                 ['Setoran', 'admin.setoran.index', 'notebook-pen'],
                 ['Target', 'admin.targets.index', 'target'],
                 ['Wali–Santri', 'admin.wali-links.index', 'heart-handshake'],
+                ['Cetak Semua', 'admin.reports.all-tahfidz', 'file-text'],
             ],
             'musyrif' => [
                 ['Dashboard', 'musyrif.dashboard', 'layout-dashboard'],

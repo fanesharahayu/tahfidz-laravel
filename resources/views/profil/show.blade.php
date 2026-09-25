@@ -51,7 +51,7 @@
         <div class="table-wrap"><table>
             <tr><th>Perangkat</th><th>IP</th><th>Masuk</th><th>Terakhir aktif</th><th>Durasi</th><th>Status</th></tr>
             @foreach ($sessions as $s)
-                <tr @if ($s['is_current']) style="background:var(--green-50)" @endif>
+                <tr @if ($s['is_current']) class="active-session" @endif>
                     <td>
                         <div style="display:flex;gap:8px;align-items:center">
                             <i data-lucide="{{ \App\Helpers\UserAgentParser::deviceIcon($s['device']) }}"></i>
