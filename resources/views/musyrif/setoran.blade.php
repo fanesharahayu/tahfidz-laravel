@@ -3,13 +3,13 @@
 @section('title', 'Setoran Binaan')
 
 @section('content')
-<h2>Setoran Santri Binaan</h2>
-<p class="muted">
-    <a href="{{ route('musyrif.dashboard') }}">Dashboard</a> |
-    <a href="{{ route('musyrif.binaan.index') }}">Binaan</a> |
-    <a href="{{ route('musyrif.targets.index') }}">Target</a> |
-    <a href="{{ route('musyrif.wali.index') }}">Wali</a>
-</p>
+@php($hideLayoutErrors = true)
+<div class="page-head">
+    <div>
+        <h2>Setoran Santri Binaan</h2>
+        <p class="muted">Catat dan kelola setoran hafalan binaan.</p>
+    </div>
+</div>
 
 @if ($errors->any())
     <div class="alert">{{ $errors->first() }}</div>
@@ -19,28 +19,32 @@
     <h3>Catat Setoran</h3>
     <form method="POST" action="" id="form-setoran">
         @csrf
-        <label>Santri</label>
-        <select class="input" id="select-santri" required>
-            @foreach ($binaan as $s)
-                <option value="{{ $s->id }}">{{ $s->user->nama ?? '-' }} ({{ $s->kelas ?? '-' }})</option>
-            @endforeach
-        </select>
-        <label>Juz</label>
-        <input class="input" type="number" name="juz" min="1" max="30" value="{{ old('juz') }}" required>
-        <label>Surah</label>
-        <input class="input" type="text" name="surah" value="{{ old('surah') }}" required>
-        <div style="display:flex;gap:12px">
-            <div style="flex:1">
+        <div class="form-grid">
+            <div class="full">
+                <label>Santri</label>
+                <select class="input" id="select-santri" required>
+                    @foreach ($binaan as $s)
+                        <option value="{{ $s->id }}">{{ $s->user->nama ?? '-' }} ({{ $s->kelas ?? '-' }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label>Juz</label>
+                <input class="input" type="number" name="juz" min="1" max="30" value="{{ old('juz') }}" required>
+            </div>
+            <div>
+                <label>Surah</label>
+                <input class="input" type="text" name="surah" value="{{ old('surah') }}" required>
+            </div>
+            <div>
                 <label>Ayat Awal</label>
                 <input class="input" type="number" name="ayat_awal" min="0" value="{{ old('ayat_awal', 0) }}">
             </div>
-            <div style="flex:1">
+            <div>
                 <label>Ayat Akhir</label>
                 <input class="input" type="number" name="ayat_akhir" min="0" value="{{ old('ayat_akhir', 0) }}">
             </div>
-        </div>
-        <div style="display:flex;gap:12px">
-            <div style="flex:1">
+            <div>
                 <label>Jenis</label>
                 <select class="input" name="jenis">
                     <option value="hafalan_baru">Hafalan Baru</option>
@@ -48,7 +52,7 @@
                     <option value="murajaah">Murajaah</option>
                 </select>
             </div>
-            <div style="flex:1">
+            <div>
                 <label>Nilai</label>
                 <select class="input" name="nilai">
                     <option value="lancar">Lancar</option>
@@ -56,9 +60,11 @@
                     <option value="perlu_ulang">Perlu Ulang</option>
                 </select>
             </div>
+            <div class="full">
+                <label>Catatan</label>
+                <input class="input" type="text" name="catatan" value="{{ old('catatan') }}">
+            </div>
         </div>
-        <label>Catatan</label>
-        <input class="input" type="text" name="catatan" value="{{ old('catatan') }}">
         <button class="btn" type="submit">Simpan Setoran</button>
     </form>
     <script>
@@ -73,40 +79,48 @@
 
 <div class="card">
     <h3>Riwayat Setoran</h3>
-    <table>
+    <div class="table-wrap"><table>
         <tr><th>Santri</th><th>Juz</th><th>Surah</th><th>Ayat</th><th>Jenis</th><th>Nilai</th><th>Tanggal</th><th>Aksi</th></tr>
         @forelse ($setoran as $st)
             <tr>
                 <td>{{ $st->santri->user->nama ?? '-' }}</td>
-                <td>{{ $st->juz }}</td>
+                <td><span class="badge badge-blue">Juz {{ $st->juz }}</span></td>
                 <td>{{ $st->surah }}</td>
                 <td>{{ $st->ayat_awal }}-{{ $st->ayat_akhir }}</td>
-                <td>{{ $st->jenis }}</td>
-                <td>{{ $st->nilai }}</td>
-                <td class="muted">{{ $st->created_at }}</td>
+                <td><span class="badge badge-gray">{{ $st->jenis }}</span></td>
                 <td>
-                    <form method="POST" action="{{ route('musyrif.setoran.update', $st->id) }}" style="display:inline">
+                    @if ($st->nilai === 'lancar')
+                        <span class="badge badge-green">lancar</span>
+                    @elseif ($st->nilai === 'cukup_lancar')
+                        <span class="badge badge-amber">cukup lancar</span>
+                    @else
+                        <span class="badge badge-red">{{ $st->nilai }}</span>
+                    @endif
+                </td>
+                <td class="muted">{{ $st->created_at }}</td>
+                <td style="white-space:nowrap">
+                    <form method="POST" action="{{ route('musyrif.setoran.update', $st->id) }}" class="inline-form">
                         @csrf
                         @method('PUT')
-                        <input type="number" name="juz" value="{{ $st->juz }}" min="1" max="30" required style="width:52px">
-                        <input type="text" name="surah" value="{{ $st->surah }}" required style="width:110px">
-                        <select name="nilai">
+                        <input type="number" name="juz" value="{{ $st->juz }}" min="1" max="30" required style="width:56px;padding:5px;border:1px solid #d1d5db;border-radius:6px">
+                        <input type="text" name="surah" value="{{ $st->surah }}" required style="width:110px;padding:5px;border:1px solid #d1d5db;border-radius:6px">
+                        <select name="nilai" style="padding:5px;border:1px solid #d1d5db;border-radius:6px">
                             <option value="lancar" @selected($st->nilai === 'lancar')>Lancar</option>
                             <option value="cukup_lancar" @selected($st->nilai === 'cukup_lancar')>Cukup Lancar</option>
                             <option value="perlu_ulang" @selected($st->nilai === 'perlu_ulang')>Perlu Ulang</option>
                         </select>
-                        <button class="btn" type="submit">Ubah</button>
+                        <button class="btn btn-secondary btn-sm" type="submit">Ubah</button>
                     </form>
-                    <form method="POST" action="{{ route('musyrif.setoran.destroy', $st->id) }}" style="display:inline" onsubmit="return confirm('Hapus setoran ini?')">
+                    <form method="POST" action="{{ route('musyrif.setoran.destroy', $st->id) }}" class="inline-form" onsubmit="return confirm('Hapus setoran ini?')">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger" type="submit">Hapus</button>
+                        <button class="btn btn-danger btn-sm" type="submit">Hapus</button>
                     </form>
                 </td>
             </tr>
         @empty
             <tr><td colspan="8" class="muted">Belum ada setoran.</td></tr>
         @endforelse
-    </table>
+    </table></div>
 </div>
 @endsection
