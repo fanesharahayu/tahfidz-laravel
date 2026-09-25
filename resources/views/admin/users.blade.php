@@ -20,7 +20,8 @@
                 <td>{{ $u->username }}</td>
                 <td>{{ $u->email }}</td>
                 <td><span class="badge badge-gray">{{ $u->role }}</span></td>
-                <td>
+                <td style="white-space:nowrap">
+                    <a class="btn btn-secondary btn-sm" href="{{ route('admin.users.edit', $u->id) }}"><i data-lucide="pencil"></i> Edit</a>
                     <form action="{{ url('/admin/users/' . $u->id) }}" method="POST" class="inline-form" data-confirm="Akun {{ $u->nama }} beserta seluruh datanya akan dihapus permanen.">
                         @csrf
                         @method('DELETE')

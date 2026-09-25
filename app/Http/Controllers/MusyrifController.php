@@ -275,6 +275,23 @@ class MusyrifController extends Controller
     }
 
     /**
+     * Form ubah setoran milik musyrif ini.
+     */
+    public function setoranEdit(Request $request, int $id)
+    {
+        $setoran = Setoran::with('santri.user')
+            ->where('id', $id)
+            ->where('musyrif_id', $request->user()->id)
+            ->first();
+
+        if (! $setoran) {
+            abort(404, 'Setoran tidak ditemukan');
+        }
+
+        return view('musyrif.setoran-form', ['setoran' => $setoran]);
+    }
+
+    /**
      * Hapus setoran milik musyrif ini.
      */
     public function setoranDestroy(Request $request, int $id)
@@ -346,6 +363,52 @@ class MusyrifController extends Controller
 
         return redirect()->route('musyrif.targets.index')
             ->with('status', 'Target hafalan disimpan');
+    }
+
+    /**
+     * Form ubah target milik santri binaan.
+     */
+    public function targetEdit(Request $request, int $id)
+    {
+        $target = TargetHafalan::with('santri.user')
+            ->where('id', $id)
+            ->whereHas('santri', fn ($q) => $q->where('musyrif_id', $request->user()->id))
+            ->first();
+
+        if (! $target) {
+            abort(404, 'Target tidak ditemukan');
+        }
+
+        return view('musyrif.target-form', ['target' => $target]);
+    }
+
+    /**
+     * Ubah target milik santri binaan.
+     */
+    public function targetUpdate(Request $request, int $id)
+    {
+        $target = TargetHafalan::where('id', $id)
+            ->whereHas('santri', fn ($q) => $q->where('musyrif_id', $request->user()->id))
+            ->first();
+
+        if (! $target) {
+            abort(404, 'Target tidak ditemukan');
+        }
+
+        $validated = $request->validate([
+            'target_juz' => 'required|integer|min:1|max:30',
+            'periode' => 'nullable|string|max:50',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_selesai' => 'nullable|date',
+        ], [
+            'target_juz.required' => 'Target juz wajib diisi',
+        ]);
+
+        $target->update($validated);
+        $target->santri()->update(['target_juz' => $validated['target_juz']]);
+
+        return redirect()->route('musyrif.targets.index')
+            ->with('status', 'Target diperbarui');
     }
 
     /**

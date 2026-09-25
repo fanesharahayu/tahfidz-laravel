@@ -93,6 +93,85 @@ class AdminController extends Controller
         return redirect()->back()->with('status', 'User berhasil dihapus');
     }
 
+    public function usersEdit($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('admin.user-form', ['user' => $user]);
+    }
+
+    public function usersUpdate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama' => 'required|string|max:100',
+            'username' => 'required|string|max:50|unique:users,username,' . $user->id,
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6',
+            'role' => 'required|in:admin,musyrif,santri,wali',
+        ], [
+            'nama.required' => 'Semua field wajib diisi',
+            'username.required' => 'Semua field wajib diisi',
+            'email.required' => 'Semua field wajib diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'username.unique' => 'Username atau email sudah ada',
+            'email.unique' => 'Username atau email sudah ada',
+            'role.in' => 'Role tidak valid',
+        ]);
+
+        $user->update([
+            'name' => $validated['nama'],
+            'nama' => $validated['nama'],
+            'username' => $validated['username'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+        ]);
+
+        if (! empty($validated['password'])) {
+            $user->update(['password' => $validated['password']]);
+        }
+
+        return redirect()->route('admin.users.index')->with('status', 'User berhasil diperbarui');
+    }
+
+    public function santriIndex()
+    {
+        $santri = Santri::with(['user', 'musyrif'])->orderBy('kelas')->get();
+
+        return view('admin.santri', ['santri' => $santri]);
+    }
+
+    public function santriCreate()
+    {
+        $musyrifList = User::where('role', 'musyrif')->orderBy('nama')->get(['id', 'nama']);
+
+        return view('admin.santri-form', ['musyrifList' => $musyrifList]);
+    }
+
+    public function santriEdit($id)
+    {
+        $santri = Santri::with('user')->findOrFail($id);
+        $musyrifList = User::where('role', 'musyrif')->orderBy('nama')->get(['id', 'nama']);
+
+        return view('admin.santri-form', [
+            'santri' => $santri,
+            'musyrifList' => $musyrifList,
+        ]);
+    }
+
+    public function santriDestroy(Request $request, $id)
+    {
+        $santri = Santri::findOrFail($id);
+        $santri->user()->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Santri berhasil dihapus']);
+        }
+
+        return redirect()->route('admin.santri.index')->with('status', 'Santri berhasil dihapus');
+    }
+
     public function santriStore(Request $request)
     {
         $validated = $request->validate([
@@ -382,5 +461,31 @@ class AdminController extends Controller
         }
 
         return redirect()->back()->with('status', 'Setoran dihapus');
+    }
+
+    public function setoranIndex()
+    {
+        $setoran = Setoran::with(['santri.user', 'musyrif'])->latest()->get();
+
+        return view('admin.setoran', ['setoran' => $setoran]);
+    }
+
+    public function setoranCreate()
+    {
+        return view('admin.setoran-form', [
+            'santriList' => Santri::with('user')->get(),
+            'musyrifList' => User::where('role', 'musyrif')->orderBy('nama')->get(['id', 'nama']),
+        ]);
+    }
+
+    public function setoranEdit($id)
+    {
+        $setoran = Setoran::findOrFail($id);
+
+        return view('admin.setoran-form', [
+            'setoran' => $setoran,
+            'santriList' => Santri::with('user')->get(),
+            'musyrifList' => User::where('role', 'musyrif')->orderBy('nama')->get(['id', 'nama']),
+        ]);
     }
 }

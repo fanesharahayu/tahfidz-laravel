@@ -94,18 +94,7 @@
                 </td>
                 <td class="muted">{{ $st->created_at }}</td>
                 <td style="white-space:nowrap">
-                    <form method="POST" action="{{ route('musyrif.setoran.update', $st->id) }}" class="inline-form">
-                        @csrf
-                        @method('PUT')
-                        <input type="number" name="juz" value="{{ $st->juz }}" min="1" max="30" required style="width:56px;padding:5px;border:1px solid #d1d5db;border-radius:6px">
-                        <input type="text" name="surah" value="{{ $st->surah }}" required style="width:110px;padding:5px;border:1px solid #d1d5db;border-radius:6px">
-                        <select name="nilai" style="padding:5px;border:1px solid #d1d5db;border-radius:6px">
-                            <option value="lancar" @selected($st->nilai === 'lancar')>Lancar</option>
-                            <option value="cukup_lancar" @selected($st->nilai === 'cukup_lancar')>Cukup Lancar</option>
-                            <option value="perlu_ulang" @selected($st->nilai === 'perlu_ulang')>Perlu Ulang</option>
-                        </select>
-                        <button class="btn btn-secondary btn-sm" type="submit">Ubah</button>
-                    </form>
+                    <a class="btn btn-secondary btn-sm" href="{{ route('musyrif.setoran.edit', $st->id) }}"><i data-lucide="pencil"></i> Edit</a>
                     <form method="POST" action="{{ route('musyrif.setoran.destroy', $st->id) }}" class="inline-form" data-confirm="Setoran Juz {{ $st->juz }} ({{ $st->surah }}) akan dihapus permanen.">
                         @csrf
                         @method('DELETE')

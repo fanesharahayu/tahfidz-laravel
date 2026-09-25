@@ -55,7 +55,8 @@
                 <td>{{ $t->periode ?? '-' }}</td>
                 <td>{{ $t->tanggal_mulai ?? '-' }}</td>
                 <td>{{ $t->tanggal_selesai ?? '-' }}</td>
-                <td>
+                <td style="white-space:nowrap">
+                    <a class="btn btn-secondary btn-sm" href="{{ route('musyrif.target.edit', $t->id) }}"><i data-lucide="pencil"></i> Edit</a>
                     <form method="POST" action="{{ route('musyrif.target.destroy', $t->id) }}" class="inline-form" data-confirm="Target {{ $t->target_juz }} juz ini akan dihapus permanen.">
                         @csrf
                         @method('DELETE')
