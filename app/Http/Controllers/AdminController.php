@@ -100,6 +100,11 @@ class AdminController extends Controller
         return view('admin.user-form', ['user' => $user]);
     }
 
+    public function usersCreate()
+    {
+        return view('admin.user-form');
+    }
+
     public function usersUpdate(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -254,12 +259,49 @@ class AdminController extends Controller
     public function targetIndex()
     {
         $targets = TargetHafalan::with('santri.user')->latest()->get();
+
+        return view('admin.targets', ['targets' => $targets]);
+    }
+
+    public function targetCreate()
+    {
         $santriList = Santri::with('user')->get();
 
-        return view('admin.targets', [
-            'targets' => $targets,
+        return view('admin.target-form', ['santriList' => $santriList]);
+    }
+
+    public function targetEdit($id)
+    {
+        $target = TargetHafalan::with('santri.user')->findOrFail($id);
+        $santriList = Santri::with('user')->get();
+
+        return view('admin.target-form', [
+            'target' => $target,
             'santriList' => $santriList,
         ]);
+    }
+
+    public function targetUpdate(Request $request, $id)
+    {
+        $target = TargetHafalan::findOrFail($id);
+
+        $validated = $request->validate([
+            'target_juz' => 'required|integer|min:1|max:30',
+            'periode' => 'nullable|string|max:50',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_selesai' => 'nullable|date',
+        ], [
+            'target_juz.required' => 'Santri dan target juz wajib diisi',
+        ]);
+
+        $target->update($validated);
+        Santri::where('id', $target->santri_id)->update(['target_juz' => $validated['target_juz']]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Target hafalan diperbarui']);
+        }
+
+        return redirect()->route('admin.targets.index')->with('status', 'Target hafalan diperbarui');
     }
 
     public function targetStore(Request $request)
@@ -307,14 +349,49 @@ class AdminController extends Controller
     public function waliLinksIndex()
     {
         $links = WaliSantri::with(['wali', 'santri.user'])->orderBy('id')->get();
+
+        return view('admin.wali-links', ['links' => $links]);
+    }
+
+    public function waliLinksCreate()
+    {
         $waliList = User::where('role', 'wali')->orderBy('nama')->get(['id', 'nama', 'username']);
         $santriList = Santri::with('user')->get();
 
-        return view('admin.wali-links', [
-            'links' => $links,
+        return view('admin.wali-form', [
             'waliList' => $waliList,
             'santriList' => $santriList,
         ]);
+    }
+
+    public function waliLinksEdit($id)
+    {
+        $link = WaliSantri::with(['wali', 'santri.user'])->findOrFail($id);
+        $waliList = User::where('role', 'wali')->orderBy('nama')->get(['id', 'nama', 'username']);
+        $santriList = Santri::with('user')->get();
+
+        return view('admin.wali-form', [
+            'link' => $link,
+            'waliList' => $waliList,
+            'santriList' => $santriList,
+        ]);
+    }
+
+    public function waliLinksUpdate(Request $request, $id)
+    {
+        $link = WaliSantri::findOrFail($id);
+
+        $validated = $request->validate([
+            'relasi' => 'nullable|string|max:50',
+        ]);
+
+        $link->update(['relasi' => $validated['relasi'] ?? 'Wali Santri']);
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Hubungan diperbarui']);
+        }
+
+        return redirect()->route('admin.wali-links.index')->with('status', 'Hubungan diperbarui');
     }
 
     public function waliLinksStore(Request $request)

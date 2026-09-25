@@ -99,4 +99,39 @@ class EditPagesTest extends TestCase
         $this->actingAs($santri)->get('/admin/setoran')->assertForbidden();
         $this->actingAs($santri)->get("/admin/users/{$santri->id}/edit")->assertForbidden();
     }
+
+    public function test_admin_create_pages_dan_update_target_wali(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        [$musyrif, $santriUser, $santri, $setoran, $target] = $this->seedMusyrifSantri();
+        $wali = User::factory()->create(['role' => 'wali']);
+        $link = \App\Models\WaliSantri::create([
+            'wali_user_id' => $wali->id, 'santri_id' => $santri->id, 'relasi' => 'Ayah',
+        ]);
+
+        // Halaman tambah khusus (bukan form menempel di index).
+        $this->actingAs($admin)->get('/admin/users/create')->assertOk()->assertSee('Tambah Pengguna');
+        $this->actingAs($admin)->get('/admin/target/create')->assertOk()->assertSee('Tambah Target');
+        $this->actingAs($admin)->get('/admin/wali-link/create')->assertOk()->assertSee('Tambah Hubungan');
+        $this->actingAs($admin)->get('/admin/users')->assertOk()->assertSee('Tambah Pengguna');
+        $this->actingAs($admin)->get('/admin/targets')->assertOk()->assertSee('Tambah Target');
+        $this->actingAs($admin)->get('/admin/wali-links')->assertOk()->assertSee('Tambah Hubungan');
+
+        // Index tidak lagi memuat form tambah menempel.
+        $this->actingAs($admin)->get('/admin/users')->assertDontSee('name="password"');
+        $this->actingAs($admin)->get('/admin/targets')->assertDontSee('name="santri_id"');
+
+        // Ubah target + hubungan.
+        $this->actingAs($admin)->get("/admin/target/{$target->id}/edit")->assertOk();
+        $this->actingAs($admin)->put("/admin/target/{$target->id}", [
+            'target_juz' => 12, 'periode' => 'Genap',
+        ])->assertRedirect('/admin/targets');
+        $this->assertEquals(12, $target->fresh()->target_juz);
+
+        $this->actingAs($admin)->get("/admin/wali-link/{$link->id}/edit")->assertOk();
+        $this->actingAs($admin)->put("/admin/wali-link/{$link->id}", [
+            'relasi' => 'Ibu',
+        ])->assertRedirect('/admin/wali-links');
+        $this->assertEquals('Ibu', $link->fresh()->relasi);
+    }
 }

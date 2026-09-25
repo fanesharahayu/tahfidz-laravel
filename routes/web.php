@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'usersIndex'])->name('users.index');
+        Route::get('/users/create', [AdminController::class, 'usersCreate'])->name('users.create');
         Route::post('/users', [AdminController::class, 'usersStore'])->name('users.store');
         Route::get('/users/{id}/edit', [AdminController::class, 'usersEdit'])->name('users.edit');
         Route::match(['put', 'patch'], '/users/{id}', [AdminController::class, 'usersUpdate'])->name('users.update');
@@ -42,10 +43,16 @@ Route::middleware('auth')->group(function () {
         Route::match(['put', 'patch'], '/santri/{id}', [AdminController::class, 'santriUpdate'])->name('santri.update');
         Route::delete('/santri/{id}', [AdminController::class, 'santriDestroy'])->name('santri.destroy');
         Route::get('/targets', [AdminController::class, 'targetIndex'])->name('targets.index');
+        Route::get('/target/create', [AdminController::class, 'targetCreate'])->name('target.create');
         Route::post('/target', [AdminController::class, 'targetStore'])->name('target.store');
+        Route::get('/target/{id}/edit', [AdminController::class, 'targetEdit'])->name('target.edit');
+        Route::match(['put', 'patch'], '/target/{id}', [AdminController::class, 'targetUpdate'])->name('target.update');
         Route::delete('/target/{id}', [AdminController::class, 'targetDestroy'])->name('target.destroy');
         Route::get('/wali-links', [AdminController::class, 'waliLinksIndex'])->name('wali-links.index');
+        Route::get('/wali-link/create', [AdminController::class, 'waliLinksCreate'])->name('wali-links.create');
         Route::post('/wali-link', [AdminController::class, 'waliLinksStore'])->name('wali-links.store');
+        Route::get('/wali-link/{id}/edit', [AdminController::class, 'waliLinksEdit'])->name('wali-links.edit');
+        Route::match(['put', 'patch'], '/wali-link/{id}', [AdminController::class, 'waliLinksUpdate'])->name('wali-links.update');
         Route::delete('/wali-link/{id}', [AdminController::class, 'waliLinksDestroy'])->name('wali-links.destroy');
         Route::post('/setoran', [AdminController::class, 'setoranStore'])->name('setoran.store');
         Route::get('/setoran', [AdminController::class, 'setoranIndex'])->name('setoran.index');
