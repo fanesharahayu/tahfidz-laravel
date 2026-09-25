@@ -50,10 +50,14 @@ class PolishSmokeTest extends TestCase
         $this->assertStringContainsString('<nav class="crumbs"', $html);
         $this->assertStringContainsString('<span class="current">Pengguna</span>', $html);
         // Tombol logout hanya 1 (di sidebar), tidak ada di topbar kanan atas.
-        $this->assertEquals(1, substr_count($html, '>Logout</button>'), 'Logout harus tepat 1 tombol');
+        $this->assertEquals(1, substr_count($html, 'Logout</button>'), 'Logout harus tepat 1 tombol');
 
         $html = $this->actingAs($admin)->get('/admin/dashboard')->assertOk()->getContent();
         $this->assertStringContainsString('<span class="current">Dashboard</span>', $html);
+        // Hamburger + overlay drawer untuk mobile.
+        $this->assertStringContainsString('id="hamburger"', $html);
+        $this->assertStringContainsString('id="sidebar-overlay"', $html);
+        $this->assertStringContainsString('sidebar-open', $html);
     }
 
     public function test_sidebar_highlights_exactly_one_item(): void

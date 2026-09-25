@@ -41,6 +41,10 @@
         .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
         .topbar { background: var(--card); border-bottom: 1px solid var(--line); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 5; }
         .topbar .actions { display: flex; align-items: center; gap: 10px; }
+        .top-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+        .hamburger { display: none; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 7px; cursor: pointer; color: var(--ink); }
+        .hamburger svg { width: 20px; height: 20px; display: block; }
+        .overlay { display: none; }
         .crumbs { font-size: 14px; display: flex; align-items: center; flex-wrap: wrap; }
         .crumbs a { color: var(--muted); text-decoration: none; }
         .crumbs a:hover { color: var(--green-800); text-decoration: underline; }
@@ -107,13 +111,22 @@
 
         @media (max-width: 860px) {
             .shell { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: static; }
-            .snav { flex-direction: row; flex-wrap: wrap; }
-            .snav .group { width: 100%; }
-            .side-foot { display: none; }
+            .hamburger { display: inline-flex; }
+            .sidebar { position: fixed; left: 0; top: 0; height: 100dvh; width: 260px; z-index: 50; transform: translateX(-105%); transition: transform .25s ease; }
+            body.sidebar-open .sidebar { transform: none; box-shadow: 0 0 40px rgba(0,0,0,.35); }
+            body.sidebar-open .overlay { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 40; }
+            .snav { flex-direction: column; flex-wrap: nowrap; }
+            .snav .group { width: auto; }
+            .side-foot { display: block; }
             .form-grid { grid-template-columns: 1fr; }
             .guest-card { flex-direction: column; }
             .container { padding: 16px; }
+            .topbar { padding: 10px 14px; }
+        }
+        @media (max-width: 560px) {
+            .topbar .top-user { display: none; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .page-head h2 { font-size: 20px; }
         }
     </style>
 </head>
@@ -196,13 +209,16 @@
                 <div class="role-badge"><span class="badge badge-green">{{ $roleNames[$role] ?? $role }}</span></div>
                 <form action="{{ route('logout') }}" method="POST" style="margin-top:10px">
                     @csrf
-                    <button class="btn btn-danger btn-sm" type="submit" style="width:100%">Logout</button>
+                    <button class="btn btn-danger btn-sm" type="submit" style="width:100%"><i data-lucide="log-out"></i> Logout</button>
                 </form>
             </div>
         </aside>
+        <div class="overlay" id="sidebar-overlay"></div>
         <div class="main">
             <div class="topbar">
-                <nav class="crumbs" aria-label="Breadcrumb">
+                <div class="top-left">
+                    <button class="hamburger" id="hamburger" aria-label="Buka tutup menu"><i data-lucide="menu"></i></button>
+                    <nav class="crumbs" aria-label="Breadcrumb">
                     @foreach ($crumbs as $i => [$label, $crumbRoute])
                         @if ($i > 0)<span class="sep">/</span>@endif
                         @if ($crumbRoute)
@@ -212,8 +228,9 @@
                         @endif
                     @endforeach
                 </nav>
+                </div>
                 <div class="actions">
-                    <span class="muted">{{ auth()->user()->nama }} · {{ $roleNames[$role] ?? $role }}</span>
+                    <span class="muted top-user">{{ auth()->user()->nama }} · {{ $roleNames[$role] ?? $role }}</span>
                 </div>
             </div>
             <div class="container">
@@ -238,6 +255,23 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
+(function () {
+    function closeSidebar() { document.body.classList.remove('sidebar-open'); }
+    var burger = document.getElementById('hamburger');
+    if (burger) burger.addEventListener('click', function () {
+        document.body.classList.toggle('sidebar-open');
+    });
+    var overlay = document.getElementById('sidebar-overlay');
+    if (overlay) overlay.addEventListener('click', closeSidebar);
+    document.querySelectorAll('.snav a').forEach(function (a) {
+        a.addEventListener('click', function () {
+            if (window.innerWidth <= 860) closeSidebar();
+        });
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSidebar();
+    });
+})();
 document.addEventListener('submit', function (e) {
     var form = e.target;
     if (!form || form.tagName !== 'FORM' || !form.hasAttribute('data-confirm')) return;
