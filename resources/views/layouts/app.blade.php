@@ -39,12 +39,9 @@
         .btn svg { width: 15px; height: 15px; vertical-align: -2px; }
         h2 svg { width: 22px; height: 22px; vertical-align: -3px; }
         .side-foot { padding: 12px; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-direction: column; gap: 8px; }
-        .theme-toggle { width: 100%; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 14px; font-weight: 600; }
-        .theme-toggle:hover { background: rgba(255,255,255,.15); }
-        .theme-toggle svg { width: 18px; height: 18px; flex-shrink: 0; }
-        .theme-toggle .icon-sun, .theme-toggle .label-light { display: none; }
-        [data-theme="dark"] .theme-toggle .icon-sun, [data-theme="dark"] .theme-toggle .label-light { display: block; }
-        [data-theme="dark"] .theme-toggle .icon-moon, [data-theme="dark"] .theme-toggle .label-dark { display: none; }
+        .account-menu .icon-sun, .account-menu .label-light { display: none; }
+        [data-theme="dark"] .account-menu .icon-sun, [data-theme="dark"] .account-menu .label-light { display: block; }
+        [data-theme="dark"] .account-menu .icon-moon, [data-theme="dark"] .account-menu .label-dark { display: none; }
         .account { position: relative; }
         .account-toggle { width: 100%; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 10px; padding: 8px 10px; cursor: pointer; text-align: left; font-size: 14px; }
         .account-toggle:hover { background: rgba(255,255,255,.15); }
@@ -101,14 +98,8 @@
         [data-theme="dark"] .hamburger { background: var(--card); color: var(--ink); }
         [data-theme="dark"] .guest-card { background: var(--card); }
         [data-theme="dark"] .guest-form { color: var(--ink); }
-        /* Glow saat dark mode */
-        [data-theme="dark"] .brand .logo { text-shadow: 0 0 18px rgba(110,231,183,.8); }
-        [data-theme="dark"] .stat { border-color: rgba(52,211,153,.4); box-shadow: 0 0 16px rgba(52,211,153,.18); }
-        [data-theme="dark"] .card { box-shadow: 0 0 14px rgba(52,211,153,.08); }
-        [data-theme="dark"] .btn { box-shadow: 0 0 12px rgba(5,150,105,.45); }
-        [data-theme="dark"] .snav a.active { box-shadow: 0 0 12px rgba(110,231,183,.35); }
-        [data-theme="dark"] .avatar { box-shadow: 0 0 14px rgba(52,211,153,.5); }
-        [data-theme="dark"] .account-toggle, [data-theme="dark"] .theme-toggle { box-shadow: 0 0 10px rgba(52,211,153,.15); }
+        /* Glow halus saat dark mode: hanya icon menu yang aktif */
+        [data-theme="dark"] .snav a.active svg { filter: drop-shadow(0 0 5px rgba(110,231,183,.9)); }
         .container { max-width: 1080px; width: 100%; margin: 0 auto; padding: 24px; }
 
         /* ===== Guest (login) ===== */
@@ -280,6 +271,12 @@
                 <div class="account" id="account">
                     <div class="account-menu" id="account-menu">
                         <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.show') ? 'active' : '' }}"><i data-lucide="circle-user-round"></i>Profile</a>
+                        <button type="button" id="theme-toggle" aria-label="Ganti mode gelap terang">
+                            <i data-lucide="moon" class="icon-moon"></i>
+                            <i data-lucide="sun" class="icon-sun"></i>
+                            <span class="label-dark">Mode Gelap</span>
+                            <span class="label-light">Mode Terang</span>
+                        </button>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="logout-btn"><i data-lucide="log-out"></i>Logout</button>
@@ -294,12 +291,6 @@
                         <i data-lucide="chevron-up"></i>
                     </button>
                 </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Ganti mode gelap terang">
-                    <i data-lucide="moon" class="icon-moon"></i>
-                    <i data-lucide="sun" class="icon-sun"></i>
-                    <span class="label-dark">Mode Gelap</span>
-                    <span class="label-light">Mode Terang</span>
-                </button>
             </div>
         </aside>
         <div class="overlay" id="sidebar-overlay"></div>
