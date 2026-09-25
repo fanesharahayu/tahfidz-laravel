@@ -20,8 +20,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'nama',
+        'role',
     ];
 
     /**
@@ -45,5 +48,35 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function santri()
+    {
+        return $this->hasOne(Santri::class, 'user_id');
+    }
+
+    public function musyrifProfile()
+    {
+        return $this->hasOne(Musyrif::class, 'user_id');
+    }
+
+    public function santriBinaan()
+    {
+        return $this->hasMany(Santri::class, 'musyrif_id');
+    }
+
+    public function setoranDinilai()
+    {
+        return $this->hasMany(Setoran::class, 'musyrif_id');
+    }
+
+    public function waliLinks()
+    {
+        return $this->hasMany(WaliSantri::class, 'wali_user_id');
+    }
+
+    public function hasRole(string ...$roles): bool
+    {
+        return in_array($this->role, $roles, true);
     }
 }
