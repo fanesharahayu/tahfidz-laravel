@@ -170,18 +170,26 @@
             </div>
         </div>
         <div class="hero-visual">
-            <div class="mock">
-                <div class="row"><span>Ahmad Farhan · Juz 3</span><span class="pill">lancar</span></div>
-                <div class="bar"><i style="width:72%"></i></div>
-            </div>
-            <div class="mock">
-                <div class="row"><span>Muhammad Rizki · Juz 5</span><span class="pill">lancar</span></div>
-                <div class="bar"><i style="width:55%"></i></div>
-            </div>
-            <div class="mock">
-                <div class="row"><span>Target Semester · 6 Juz</span><span class="pill">berjalan</span></div>
-                <div class="bar"><i style="width:38%"></i></div>
-            </div>
+            @if ($jumlahSantri > 0)
+                <div class="mock">
+                    <div class="row"><span>Total Santri: {{ $jumlahSantri }}</span><span class="pill">aktif</span></div>
+                    <div class="bar"><i style="width:100%"></i></div>
+                </div>
+                <div class="mock">
+                    <div class="row"><span>Total Setoran: {{ $jumlahSetoran }}</span><span class="pill">tercatat</span></div>
+                    <div class="bar"><i style="width:100%"></i></div>
+                </div>
+                <div class="mock">
+                    <div class="row"><span>Musyrif: {{ $jumlahMusyrif }} | Wali: {{ $jumlahWali }}</span><span class="pill">terhubung</span></div>
+                    <div class="bar"><i style="width:100%"></i></div>
+                </div>
+            @else
+                <div class="mock" style="text-align:center;padding:40px 20px">
+                    <i data-lucide="book-open" style="width:48px;height:48px;margin:0 auto 16px;color:rgba(255,255,255,.4)"></i>
+                    <p style="margin:0 0 8px;font-size:15px;color:#eafff3">Belum ada data hafalan</p>
+                    <p style="margin:0;font-size:13px;color:#bfe6cf">Santri belum terdaftar. Admin buatkan akun dulu.</p>
+                </div>
+            @endif
         </div>
     </div>
 </section>
