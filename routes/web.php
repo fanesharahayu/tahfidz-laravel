@@ -6,6 +6,7 @@ use App\Http\Controllers\MusyrifController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SantriController;
 use App\Http\Controllers\WaliController;
+use App\Http\Controllers\ReportController;
 use App\Models\Santri;
 use App\Models\Setoran;
 use App\Models\User;
@@ -74,6 +75,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/setoran/{id}/edit', [AdminController::class, 'setoranEdit'])->name('setoran.edit');
         Route::match(['put', 'patch'], '/setoran/{id}', [AdminController::class, 'setoranUpdate'])->name('setoran.update');
         Route::delete('/setoran/{id}', [AdminController::class, 'setoranDestroy'])->name('setoran.destroy');
+        Route::get('/reports/tahfidz/{santriId}', [ReportController::class, 'downloadTahfidzReport'])->name('reports.tahfidz');
+        Route::get('/reports/all-tahfidz', [ReportController::class, 'downloadAllTahfidzReports'])->name('reports.all-tahfidz');
     });
 
     Route::middleware('role:musyrif')->prefix('musyrif')->name('musyrif.')->group(function () {

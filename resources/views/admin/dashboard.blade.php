@@ -35,7 +35,7 @@
                 <td>{{ $s->kelas ?? '-' }}</td>
                 <td><span class="badge badge-blue">{{ $s->target_juz }} juz</span></td>
                 <td>{{ $s->musyrif->nama ?? '-' }}</td>
-                <td><a class="btn btn-secondary btn-sm" href="{{ route('admin.santri.edit', $s->id) }}"><i data-lucide="pencil"></i> Edit</a></td>
+                <td><a class="btn btn-secondary btn-sm" href="{{ route('admin.santri.edit', $s->id) }}"><i data-lucide="pencil"></i> Edit</a> <a class="btn btn-primary btn-sm" href="{{ route('admin.reports.tahfidz', $s->id) }}"><i data-lucide="download"></i> Cetak</a></td>
             </tr>
         @empty
             <tr><td colspan="6" class="muted">Belum ada data santri.</td></tr>
