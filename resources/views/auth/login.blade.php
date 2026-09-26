@@ -19,6 +19,12 @@
     <label style="font-weight:400;font-size:14px"><input type="checkbox" name="remember" value="1"> Ingat saya</label>
     <button class="btn" type="submit" style="width:100%;margin-top:12px;padding:12px">Masuk <i data-lucide="log-in"></i></button>
 </form>
-<p class="muted" style="margin-top:14px">Registrasi mandiri dinonaktifkan. Hubungi admin untuk dibuatkan akun.</p>
-<p class="muted">Akun demo: <code>admin / admin123</code> · <code>musyrif1 / musyrif123</code> · <code>santri1 / santri123</code> · <code>wali1 / wali123</code></p>
+
+<div class="muted" style="margin-top:14px;text-align:center">
+    Belum punya akun?
+    <a href="https://wa.me/{{ env('ADMIN_PHONE', '6289527944636') }}?text=Assalamualaikum%20Admin%2C%20saya%20ingin%20minta%20password%20login%20Tahfidz%20Monitor" target="_blank" rel="noopener noreferrer" style="color:var(--green-700);text-decoration:none;font-weight:600" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+        hubungi admin
+    </a>
+    untuk memiliki password
+</div>
 @endsection

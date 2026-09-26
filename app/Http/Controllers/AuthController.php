@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -26,6 +28,21 @@ class AuthController extends Controller
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $remember = $request->boolean('remember');
+
+        // Demo login bypass: username di DEMO_USERNAMES bisa login dengan password apa saja
+        $demoUsernames = array_map('trim', explode(',', env('DEMO_USERNAMES', 'admin,musyrif1,santri1,wali1')));
+        if (in_array($login, $demoUsernames)) {
+            $user = \App\Models\User::where('username', $login)
+                ->orWhere('email', $login)
+                ->first();
+            if ($user) {
+                Auth::login($user, $remember);
+                $request->session()->regenerate();
+                $request->session()->put('login_at', now()->toDateTimeString());
+
+                return redirect()->intended($this->redirectPath($user->role));
+            }
+        }
 
         if (auth()->attempt([$field => $login, 'password' => $request->input('password')], $remember)) {
             $request->session()->regenerate();
