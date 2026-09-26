@@ -23,11 +23,12 @@
 <div class="card">
     <h3>Riwayat Setoran</h3>
     <div class="table-wrap"><table>
-        <tr><th>Juz</th><th>Surah</th><th>Nilai</th><th>Musyrif</th><th>Tanggal</th></tr>
+        <tr><th>Juz</th><th>Surah</th><th>Ayat</th><th>Nilai</th><th>Musyrif</th><th>Tanggal</th></tr>
         @forelse ($setoran as $st)
             <tr>
                 <td><span class="badge badge-blue">Juz {{ $st->juz }}</span></td>
                 <td>{{ $st->surah }}</td>
+                <td>Ayat {{ $st->ayat_awal }}{{ $st->ayat_akhir ? ' – ' . $st->ayat_akhir : '' }}</td>
                 <td>
                     @if ($st->nilai === 'lancar')
                         <span class="badge badge-green">lancar</span>
@@ -41,7 +42,7 @@
                 <td class="muted">{{ $st->created_at }}</td>
             </tr>
         @empty
-            <tr><td colspan="5" class="muted">Belum ada setoran.</td></tr>
+            <tr><td colspan="6" class="muted">Belum ada setoran.</td></tr>
         @endforelse
     </table></div>
 </div>
