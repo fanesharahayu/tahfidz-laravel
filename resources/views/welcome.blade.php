@@ -244,7 +244,7 @@
         <div class="contact-grid">
             <div class="fcard"><div class="fic"><i data-lucide="map-pin"></i></div><h3>Alamat</h3><p>Jl. Raya Curug No.02, RT.03/RW.03,<br>Curug, Kec. Bojongsari,<br>Kota Depok, Jawa Barat 16517</p></div>
             <div class="fcard"><div class="fic"><i data-lucide="phone"></i></div><h3>Telepon / WhatsApp</h3><p>{{ env('ADMIN_PHONE', '6289527944636') }}<br>Senin–Sabtu, 08.00–16.00 WIB</p></div>
-            <div class="fcard"><div class="fic"><i data-lucide="mail"></i></div><h3>Email</h3><p>info@tahfidz.sch.id<br>Respon maks. 1×24 jam kerja</p></div>
+            <div class="fcard"><div class="fic"><i data-lucide="mail"></i></div><h3>Email</h3><p>tahfidz33@gmail.com<br>Respon maks. 1×24 jam kerja</p></div>
         </div>
         <div class="cta-band">
             <div>
@@ -278,7 +278,7 @@
                 <ul class="foot-contact">
                     <li><i data-lucide="map-pin"></i><span>Jl. Raya Curug No.02, RT.03/RW.03, Curug, Kec. Bojongsari, Kota Depok, Jawa Barat 16517</span></li>
                     <li><i data-lucide="phone"></i><span>{{ env('ADMIN_PHONE', '6289527944636') }}</span></li>
-                    <li><i data-lucide="mail"></i><span>info@tahfidz.sch.id</span></li>
+                    <li><i data-lucide="mail"></i><span>tahfidz33@gmail.com</span></li>
                 </ul>
             </div>
         </div>
