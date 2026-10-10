@@ -58,15 +58,6 @@
     </div>
 
     <div class="page-container">
-        @if(!($pdfAvailable ?? true))
-            <div class="page" style="min-height:auto;margin-bottom:16px">
-                <div class="notice">
-                    <strong>Mode pratinjau cetak browser.</strong>
-                    Ekspor PDF server-side nonaktif karena package DomPDF belum terpasang.
-                    Gunakan tombol <strong>Cetak / Simpan</strong> lalu pilih printer atau "Save as PDF" di dialog browser.
-                </div>
-            </div>
-        @endif
         <div class="page">
             <div class="report-header">
                 <h1>{{ $title ?? 'Laporan Tahfidz' }}</h1>
