@@ -75,6 +75,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/setoran/{id}/edit', [AdminController::class, 'setoranEdit'])->name('setoran.edit');
         Route::match(['put', 'patch'], '/setoran/{id}', [AdminController::class, 'setoranUpdate'])->name('setoran.update');
         Route::delete('/setoran/{id}', [AdminController::class, 'setoranDestroy'])->name('setoran.destroy');
+        Route::get('/tasmi', [AdminController::class, 'tasmiIndex'])->name('tasmi.index');
+        Route::get('/tasmi/create', [AdminController::class, 'tasmiCreate'])->name('tasmi.create');
+        Route::post('/tasmi', [AdminController::class, 'tasmiStore'])->name('tasmi.store');
+        Route::get('/tasmi/{id}/edit', [AdminController::class, 'tasmiEdit'])->name('tasmi.edit');
+        Route::match(['put', 'patch'], '/tasmi/{id}', [AdminController::class, 'tasmiUpdate'])->name('tasmi.update');
+        Route::delete('/tasmi/{id}', [AdminController::class, 'tasmiDestroy'])->name('tasmi.destroy');
         Route::get('/reports/tahfidz/{santriId}', [ReportController::class, 'downloadTahfidzReport'])->name('reports.tahfidz');
         Route::get('/reports/all-tahfidz', [ReportController::class, 'downloadAllTahfidzReports'])->name('reports.all-tahfidz');
     });
@@ -96,6 +102,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/santri/{santriId}', [MusyrifController::class, 'santriDetail'])->name('santri.detail');
         Route::put('/setoran/{id}', [MusyrifController::class, 'setoranUpdate'])->name('setoran.update');
         Route::delete('/setoran/{id}', [MusyrifController::class, 'setoranDestroy'])->name('setoran.destroy');
+        Route::get('/tasmi', [MusyrifController::class, 'tasmiIndex'])->name('tasmi.index');
+        Route::post('/tasmi', [MusyrifController::class, 'tasmiStore'])->name('tasmi.store');
+        Route::get('/tasmi/{id}/edit', [MusyrifController::class, 'tasmiEdit'])->name('tasmi.edit');
+        Route::put('/tasmi/{id}', [MusyrifController::class, 'tasmiUpdate'])->name('tasmi.update');
+        Route::delete('/tasmi/{id}', [MusyrifController::class, 'tasmiDestroy'])->name('tasmi.destroy');
         Route::get('/wali', [MusyrifController::class, 'waliLinksIndex'])->name('wali.index');
         Route::post('/wali-link', [MusyrifController::class, 'waliLinkStore'])->name('wali-link.store');
         Route::delete('/wali-link/{id}', [MusyrifController::class, 'waliLinkDestroy'])->name('wali-link.destroy');

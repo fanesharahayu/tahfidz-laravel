@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Santri;
 use App\Models\Setoran;
 
 class ReportController extends Controller
 {
-    // Untuk laporan per santri (tetap download PDF)
+    // Untuk laporan per santri (download PDF jika library tersedia,
+    // fallback ke preview HTML printable jika dompdf belum terinstall)
     public function downloadTahfidzReport($santriId)
     {
         $santri = Santri::with('user', 'setoran')->findOrFail($santriId);
@@ -23,8 +23,15 @@ class ReportController extends Controller
                 return ['surah' => $s->surah, 'juz' => $s->juz, 'status' => $s->nilai];
             })->toArray()
         ];
-        $pdf = Pdf::loadView('reports.tahfidz_report_pdf', $reportData);
-        return $pdf->download('laporan-tahfidz-' . str_replace(' ', '-', strtolower($santri->user->nama ?? 'laporan')) . '.pdf');
+
+        if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.tahfidz_report_pdf', $reportData);
+
+            return $pdf->download('laporan-tahfidz-' . str_replace(' ', '-', strtolower($santri->user->nama ?? 'laporan')) . '.pdf');
+        }
+
+        // Fallback: tampilkan HTML yang sama (bisa Cetak / Simpan PDF via browser)
+        return response()->view('reports.tahfidz_preview', $reportData);
     }
 
     // Untuk CETAK SEMUA (Preview HTML)

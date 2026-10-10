@@ -6,6 +6,7 @@ use App\Helpers\ProgressHelper;
 use App\Models\Santri;
 use App\Models\Setoran;
 use App\Models\TargetHafalan;
+use App\Models\Tasmi;
 use App\Models\User;
 use App\Models\WaliSantri;
 use Illuminate\Database\QueryException;
@@ -513,5 +514,119 @@ class MusyrifController extends Controller
 
         return redirect()->route('musyrif.wali.index')
             ->with('status', 'Hubungan dihapus');
+    }
+
+    public function tasmiIndex(Request $request)
+    {
+        $musyrifId = $request->user()->id;
+
+        $tasmi = Tasmi::with('santri.user')
+            ->where('musyrif_id', $musyrifId)
+            ->latest()
+            ->get();
+
+        $binaan = Santri::with('user')
+            ->where('musyrif_id', $musyrifId)
+            ->orderBy('kelas')
+            ->get();
+
+        return view('musyrif.tasmi', [
+            'tasmi' => $tasmi,
+            'binaan' => $binaan,
+        ]);
+    }
+
+    public function tasmiStore(Request $request)
+    {
+        $validated = $request->validate([
+            'santri_id' => 'required|exists:santri,id',
+            'juz' => 'required|integer|min:1|max:30',
+            'surah' => 'required|string|max:50',
+            'ayat_awal' => 'nullable|integer|min:0',
+            'ayat_akhir' => 'nullable|integer|min:0',
+            'nilai' => 'nullable|in:lancar,cukup_lancar,perlu_ulang',
+            'catatan' => 'nullable|string',
+            'tanggal_tasmi' => 'nullable|date',
+        ], [
+            'santri_id.required' => 'Santri, juz, dan surah wajib diisi',
+            'juz.required' => 'Santri, juz, dan surah wajib diisi',
+            'surah.required' => 'Santri, juz, dan surah wajib diisi',
+        ]);
+
+        $this->binaanOrFail($request, (int) $validated['santri_id']);
+
+        $tasmi = Tasmi::create([
+            'santri_id' => $validated['santri_id'],
+            'musyrif_id' => $request->user()->id,
+            'juz' => $validated['juz'],
+            'surah' => $validated['surah'],
+            'ayat_awal' => $validated['ayat_awal'] ?? 0,
+            'ayat_akhir' => $validated['ayat_akhir'] ?? 0,
+            'nilai' => $validated['nilai'] ?? 'lancar',
+            'catatan' => $validated['catatan'] ?? null,
+            'tanggal_tasmi' => $validated['tanggal_tasmi'] ?? now(),
+        ]);
+
+        return redirect()->route('musyrif.tasmi.index')
+            ->with('status', 'Tasmi berhasil dicatat');
+    }
+
+    public function tasmiEdit(Request $request, int $id)
+    {
+        $tasmi = Tasmi::with('santri.user')
+            ->where('id', $id)
+            ->where('musyrif_id', $request->user()->id)
+            ->first();
+
+        if (! $tasmi) {
+            abort(404, 'Tasmi tidak ditemukan');
+        }
+
+        return view('musyrif.tasmi-form', ['tasmi' => $tasmi]);
+    }
+
+    public function tasmiUpdate(Request $request, int $id)
+    {
+        $tasmi = Tasmi::where('id', $id)
+            ->where('musyrif_id', $request->user()->id)
+            ->first();
+
+        if (! $tasmi) {
+            abort(404, 'Tasmi tidak ditemukan');
+        }
+
+        $validated = $request->validate([
+            'juz' => 'sometimes|required|integer|min:1|max:30',
+            'surah' => 'sometimes|required|string|max:50',
+            'ayat_awal' => 'sometimes|nullable|integer|min:0',
+            'ayat_akhir' => 'sometimes|nullable|integer|min:0',
+            'nilai' => 'sometimes|nullable|in:lancar,cukup_lancar,perlu_ulang',
+            'catatan' => 'sometimes|nullable|string',
+            'tanggal_tasmi' => 'sometimes|nullable|date',
+        ], [
+            'juz.required' => 'Juz wajib diisi',
+            'surah.required' => 'Surah wajib diisi',
+        ]);
+
+        $tasmi->update($validated);
+
+        return redirect()->route('musyrif.tasmi.index')
+            ->with('status', 'Tasmi diperbarui');
+    }
+
+    public function tasmiDestroy(Request $request, int $id)
+    {
+        $tasmi = Tasmi::where('id', $id)
+            ->where('musyrif_id', $request->user()->id)
+            ->first();
+
+        if (! $tasmi) {
+            abort(404, 'Tasmi tidak ditemukan');
+        }
+
+        $tasmi->delete();
+
+        return redirect()->route('musyrif.tasmi.index')
+            ->with('status', 'Tasmi dihapus');
     }
 }

@@ -1,0 +1,64 @@
+@extends('layouts.app')
+
+@section('title', 'Tasmi Binaan')
+
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Tasmi Santri Binaan</h3>
+    <a href="{{ route('musyrif.tasmi.index') }}" class="btn btn-primary">Tambah Tasmi</a>
+</div>
+
+@if (session('status'))
+    <div class="alert alert-success">{{ session('status') }}</div>
+@endif
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Santri</th>
+                        <th>Juz</th>
+                        <th>Surah</th>
+                        <th>Ayat</th>
+                        <th>Nilai</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($tasmi as $index => $t)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $t->santri->user->nama ?? '-' }}</td>
+                            <td>{{ $t->juz }}</td>
+                            <td>{{ $t->surah ?? '-' }}</td>
+                            <td>{{ $t->ayat_awal }} - {{ $t->ayat_akhir }}</td>
+                            <td>
+                                <span class="badge {{ $t->nilai === 'lancar' ? 'bg-success' : ($t->nilai === 'cukup_lancar' ? 'bg-warning' : 'bg-danger') }}">
+                                    {{ $t->nilai }}
+                                </span>
+                            </td>
+                            <td>{{ $t->tanggal_tasmi ? \Carbon\Carbon::parse($t->tanggal_tasmi)->format('d/m/Y') : \Carbon\Carbon::parse($t->created_at)->format('d/m/Y') }}</td>
+                            <td>
+                                <a href="{{ route('musyrif.tasmi.edit', $t->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <form action="{{ route('musyrif.tasmi.destroy', $t->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data tasmi ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center">Belum ada data tasmi</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endsection
