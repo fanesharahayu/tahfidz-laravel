@@ -536,14 +536,27 @@ class MusyrifController extends Controller
         ]);
     }
 
+    public function tasmiCreate(Request $request)
+    {
+        $binaan = Santri::with('user')
+            ->where('musyrif_id', $request->user()->id)
+            ->orderBy('kelas')
+            ->get();
+
+        return view('musyrif.tasmi-create', [
+            'tasmi' => null,
+            'binaan' => $binaan,
+        ]);
+    }
+
     public function tasmiStore(Request $request)
     {
         $validated = $request->validate([
             'santri_id' => 'required|exists:santri,id',
             'juz' => 'required|integer|min:1|max:30',
+            'juz_akhir' => 'nullable|integer|min:1|max:30',
             'surah' => 'required|string|max:50',
-            'ayat_awal' => 'nullable|integer|min:0',
-            'ayat_akhir' => 'nullable|integer|min:0',
+            'surah_akhir' => 'nullable|string|max:50',
             'nilai' => 'nullable|in:lancar,cukup_lancar,perlu_ulang',
             'catatan' => 'nullable|string',
             'tanggal_tasmi' => 'nullable|date',
@@ -559,9 +572,9 @@ class MusyrifController extends Controller
             'santri_id' => $validated['santri_id'],
             'musyrif_id' => $request->user()->id,
             'juz' => $validated['juz'],
+            'juz_akhir' => $validated['juz_akhir'] ?? null,
             'surah' => $validated['surah'],
-            'ayat_awal' => $validated['ayat_awal'] ?? 0,
-            'ayat_akhir' => $validated['ayat_akhir'] ?? 0,
+            'surah_akhir' => $validated['surah_akhir'] ?? null,
             'nilai' => $validated['nilai'] ?? 'lancar',
             'catatan' => $validated['catatan'] ?? null,
             'tanggal_tasmi' => $validated['tanggal_tasmi'] ?? now(),
@@ -597,9 +610,9 @@ class MusyrifController extends Controller
 
         $validated = $request->validate([
             'juz' => 'sometimes|required|integer|min:1|max:30',
+            'juz_akhir' => 'sometimes|nullable|integer|min:1|max:30',
             'surah' => 'sometimes|required|string|max:50',
-            'ayat_awal' => 'sometimes|nullable|integer|min:0',
-            'ayat_akhir' => 'sometimes|nullable|integer|min:0',
+            'surah_akhir' => 'sometimes|nullable|string|max:50',
             'nilai' => 'sometimes|nullable|in:lancar,cukup_lancar,perlu_ulang',
             'catatan' => 'sometimes|nullable|string',
             'tanggal_tasmi' => 'sometimes|nullable|date',

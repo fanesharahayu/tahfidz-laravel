@@ -31,45 +31,46 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Juz <span class="text-danger">*</span></label>
-                    <input type="number" name="juz" class="form-control" min="1" max="30" value="{{ $tasmi->juz }}" required>
+                    <label class="form-label">Juz Awal <span class="text-danger">*</span></label>
+                    <input type="number" name="juz" class="form-control" min="1" max="30" value="{{ old('juz', $tasmi->juz) }}" required>
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Surah <span class="text-danger">*</span></label>
-                    <input type="text" name="surah" class="form-control" maxlength="50" value="{{ $tasmi->surah }}" required>
+                    <label class="form-label">Juz Akhir</label>
+                    <input type="number" name="juz_akhir" class="form-control" min="1" max="30" value="{{ old('juz_akhir', $tasmi->juz_akhir ?? '') }}">
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Ayat Awal</label>
-                    <input type="number" name="ayat_awal" class="form-control" min="0" value="{{ $tasmi->ayat_awal }}">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Surah Awal <span class="text-danger">*</span></label>
+                    <input type="text" name="surah" class="form-control" maxlength="50" value="{{ old('surah', $tasmi->surah) }}" required>
                 </div>
 
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Ayat Akhir</label>
-                    <input type="number" name="ayat_akhir" class="form-control" min="0" value="{{ $tasmi->ayat_akhir }}">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Surah Akhir</label>
+                    <input type="text" name="surah_akhir" class="form-control" maxlength="50" value="{{ old('surah_akhir', $tasmi->surah_akhir ?? '') }}">
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Nilai</label>
+                    @php($nilaiLama = old('nilai', $tasmi->nilai ?? 'lancar'))
                     <select name="nilai" class="form-select">
-                        <option value="lancar" {{ $tasmi->nilai === 'lancar' ? 'selected' : '' }}>Lancar</option>
-                        <option value="cukup_lancar" {{ $tasmi->nilai === 'cukup_lancar' ? 'selected' : '' }}>Cukup Lancar</option>
-                        <option value="perlu_ulang" {{ $tasmi->nilai === 'perlu_ulang' ? 'selected' : '' }}>Perlu Ulang</option>
+                        <option value="lancar" {{ $nilaiLama === 'lancar' ? 'selected' : '' }}>Lancar</option>
+                        <option value="cukup_lancar" {{ $nilaiLama === 'cukup_lancar' ? 'selected' : '' }}>Cukup Lancar</option>
+                        <option value="perlu_ulang" {{ $nilaiLama === 'perlu_ulang' ? 'selected' : '' }}>Perlu Ulang</option>
                     </select>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Tanggal Tasmi</label>
-                    <input type="date" name="tanggal_tasmi" class="form-control" value="{{ $tasmi->tanggal_tasmi ? \Carbon\Carbon::parse($tasmi->tanggal_tasmi)->format('Y-m-d') : '' }}">
+                    <input type="date" name="tanggal_tasmi" class="form-control" value="{{ old('tanggal_tasmi', $tasmi->tanggal_tasmi ? \Carbon\Carbon::parse($tasmi->tanggal_tasmi)->format('Y-m-d') : '') }}">
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Catatan</label>
-                <textarea name="catatan" class="form-control" rows="3">{{ $tasmi->catatan }}</textarea>
+                <textarea name="catatan" class="form-control" rows="3">{{ old('catatan', $tasmi->catatan) }}</textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

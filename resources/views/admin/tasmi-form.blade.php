@@ -63,7 +63,7 @@
         <p class="muted">Catat juz, surah, rentang ayat, dan penilaian tasmi.</p>
         <div class="form-grid">
             <div>
-                <label for="juz">Juz <span style="color:var(--red-tx)">*</span></label>
+                <label for="juz">Juz Awal <span style="color:var(--red-tx)">*</span></label>
                 <input id="juz" type="number" name="juz" class="input" min="1" max="30" value="{{ old('juz', $tasmi->juz ?? '') }}" required>
                 @error('juz')
                     <small style="color:var(--red-tx);font-size:12px">{{ $message }}</small>
@@ -71,7 +71,15 @@
             </div>
 
             <div>
-                <label for="surah">Surah <span style="color:var(--red-tx)">*</span></label>
+                <label for="juz_akhir">Juz Akhir</label>
+                <input id="juz_akhir" type="number" name="juz_akhir" class="input" min="1" max="30" value="{{ old('juz_akhir', $tasmi->juz_akhir ?? '') }}">
+                @error('juz_akhir')
+                    <small style="color:var(--red-tx);font-size:12px">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <div>
+                <label for="surah">Surah Awal <span style="color:var(--red-tx)">*</span></label>
                 <input id="surah" type="text" name="surah" class="input" maxlength="50" value="{{ old('surah', $tasmi->surah ?? '') }}" required>
                 @error('surah')
                     <small style="color:var(--red-tx);font-size:12px">{{ $message }}</small>
@@ -79,17 +87,9 @@
             </div>
 
             <div>
-                <label for="ayat_awal">Ayat Awal</label>
-                <input id="ayat_awal" type="number" name="ayat_awal" class="input" min="0" value="{{ old('ayat_awal', $tasmi->ayat_awal ?? 0) }}">
-                @error('ayat_awal')
-                    <small style="color:var(--red-tx);font-size:12px">{{ $message }}</small>
-                @enderror
-            </div>
-
-            <div>
-                <label for="ayat_akhir">Ayat Akhir</label>
-                <input id="ayat_akhir" type="number" name="ayat_akhir" class="input" min="0" value="{{ old('ayat_akhir', $tasmi->ayat_akhir ?? 0) }}">
-                @error('ayat_akhir')
+                <label for="surah_akhir">Surah Akhir</label>
+                <input id="surah_akhir" type="text" name="surah_akhir" class="input" maxlength="50" value="{{ old('surah_akhir', $tasmi->surah_akhir ?? '') }}">
+                @error('surah_akhir')
                     <small style="color:var(--red-tx);font-size:12px">{{ $message }}</small>
                 @enderror
             </div>

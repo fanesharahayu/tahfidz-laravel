@@ -5,7 +5,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>Tasmi Santri Binaan</h3>
-    <a href="{{ route('musyrif.tasmi.index') }}" class="btn btn-primary">Tambah Tasmi</a>
+    <a href="{{ route('musyrif.tasmi.create') }}" class="btn btn-primary">Tambah Tasmi</a>
 </div>
 
 @if (session('status'))
@@ -22,7 +22,6 @@
                         <th>Santri</th>
                         <th>Juz</th>
                         <th>Surah</th>
-                        <th>Ayat</th>
                         <th>Nilai</th>
                         <th>Tanggal</th>
                         <th>Aksi</th>
@@ -33,9 +32,8 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $t->santri->user->nama ?? '-' }}</td>
-                            <td>{{ $t->juz }}</td>
-                            <td>{{ $t->surah ?? '-' }}</td>
-                            <td>{{ $t->ayat_awal }} - {{ $t->ayat_akhir }}</td>
+                            <td>{{ $t->juz }}{{ $t->juz_akhir ? ' - ' . $t->juz_akhir : '' }}</td>
+                            <td>{{ $t->surah ?? '-' }}{{ $t->surah_akhir ? ' - ' . $t->surah_akhir : '' }}</td>
                             <td>
                                 <span class="badge {{ $t->nilai === 'lancar' ? 'bg-success' : ($t->nilai === 'cukup_lancar' ? 'bg-warning' : 'bg-danger') }}">
                                     {{ $t->nilai }}
@@ -53,7 +51,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">Belum ada data tasmi</td>
+                            <td colspan="7" class="text-center">Belum ada data tasmi</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -103,6 +103,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/setoran/{id}', [MusyrifController::class, 'setoranUpdate'])->name('setoran.update');
         Route::delete('/setoran/{id}', [MusyrifController::class, 'setoranDestroy'])->name('setoran.destroy');
         Route::get('/tasmi', [MusyrifController::class, 'tasmiIndex'])->name('tasmi.index');
+        Route::get('/tasmi/create', [MusyrifController::class, 'tasmiCreate'])->name('tasmi.create');
         Route::post('/tasmi', [MusyrifController::class, 'tasmiStore'])->name('tasmi.store');
         Route::get('/tasmi/{id}/edit', [MusyrifController::class, 'tasmiEdit'])->name('tasmi.edit');
         Route::put('/tasmi/{id}', [MusyrifController::class, 'tasmiUpdate'])->name('tasmi.update');
