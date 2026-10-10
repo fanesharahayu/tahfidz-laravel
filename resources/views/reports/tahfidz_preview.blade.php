@@ -38,6 +38,7 @@
         th { background: var(--green-50); color: var(--green-900); padding: 12px; border: 1px solid #d1d5db; font-size: 13px; text-transform: uppercase; text-align: left; }
         td { padding: 10px; border: 1px solid #d1d5db; font-size: 13px; }
         .santri-info { background: var(--green-50); padding: 10px 14px; border-radius: 6px; border-left: 4px solid var(--green-700); font-weight: 700; color: var(--green-900); margin-bottom: 8px; }
+        .notice { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
         .footer { text-align: center; margin-top: 40px; font-size: 10px; color: #777; }
         @media print {
             body { background: white; }
@@ -57,6 +58,15 @@
     </div>
 
     <div class="page-container">
+        @if(!($pdfAvailable ?? true))
+            <div class="page" style="min-height:auto;margin-bottom:16px">
+                <div class="notice">
+                    <strong>Mode pratinjau cetak browser.</strong>
+                    Ekspor PDF server-side nonaktif karena package DomPDF belum terpasang.
+                    Gunakan tombol <strong>Cetak / Simpan</strong> lalu pilih printer atau "Save as PDF" di dialog browser.
+                </div>
+            </div>
+        @endif
         <div class="page">
             <div class="report-header">
                 <h1>{{ $title ?? 'Laporan Tahfidz' }}</h1>

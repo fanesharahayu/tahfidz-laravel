@@ -14,6 +14,7 @@ class ReportController extends Controller
     public function downloadTahfidzReport($santriId)
     {
         $santri = Santri::with('user', 'setoran')->findOrFail($santriId);
+        $pdfAvailable = class_exists(\Barryvdh\DomPDF\Facade\Pdf::class);
         $reportData = [
             'title' => 'Laporan Tahfidz Santri',
             'date' => date('d F Y'),
@@ -21,16 +22,18 @@ class ReportController extends Controller
             'kelas' => $santri->kelas ?? 'N/A',
             'hafalan' => $santri->setoran->map(function ($s) {
                 return ['surah' => $s->surah, 'juz' => $s->juz, 'status' => $s->nilai];
-            })->toArray()
+            })->toArray(),
+            'pdfAvailable' => $pdfAvailable,
         ];
 
-        if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
+        if ($pdfAvailable) {
             $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.tahfidz_report_pdf', $reportData);
 
             return $pdf->download('laporan-tahfidz-' . str_replace(' ', '-', strtolower($santri->user->nama ?? 'laporan')) . '.pdf');
         }
 
-        // Fallback: tampilkan HTML yang sama (bisa Cetak / Simpan PDF via browser)
+        // DomPDF belum terpasang: tampilkan pratinjau cetak browser
+        // (bukan ekspor PDF server-side). Lihat banner di view.
         return response()->view('reports.tahfidz_preview', $reportData);
     }
 
